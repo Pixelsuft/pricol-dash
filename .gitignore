@@ -9,3 +9,9 @@ pricol-dash
 assets
 *.exe
 *.dll
+*.rar
+*.zip
+*.7z
+*.tar
+*.gz
+*.xz
