@@ -1,0 +1,1 @@
+d:\c++\tcc\tcc -run -Iinclude -Ilib\SDL2\include -Ilib\miniz -Ilib\libspng\spng -Llib\SDL2\lib\x64 -Llib\libspng\build\Release -lspng -lSDL2 src/*.c src/app/*.c src/ren/*.c

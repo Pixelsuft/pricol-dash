@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\app">
+      <UniqueIdentifier>{585d14f7-796b-42e7-8e33-e52b5f6e6b5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\app">
+      <UniqueIdentifier>{534d7da9-fd52-4203-9712-6295e8ac6fc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\api">
+      <UniqueIdentifier>{b8c5e33e-a094-4360-a31f-b9a456dc0f5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\api">
+      <UniqueIdentifier>{31f6a444-7042-4abe-9b14-dd4979ff72a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ren">
+      <UniqueIdentifier>{a82ae9db-c8cb-4c0e-bd29-f4759163a673}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ren">
+      <UniqueIdentifier>{d680a923-169e-4034-9951-711c9219e64d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\scenes">
+      <UniqueIdentifier>{4f2add8a-8779-468b-a9dc-41ff63e97614}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\scenes">
+      <UniqueIdentifier>{662784ee-c413-40c0-927d-2cbef02f3ada}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\go">
+      <UniqueIdentifier>{aa7a5e89-432f-4235-9d47-76f9f05ab2eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\go">
+      <UniqueIdentifier>{9eab5028-57ae-4560-a1fe-b952efdd1d2d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\main.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\minstd.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\app_base.c">
+      <Filter>Source Files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\app_sdl2.c">
+      <Filter>Source Files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ren\ren_base.c">
+      <Filter>Source Files\ren</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ren\ren_sdl2.c">
+      <Filter>Source Files\ren</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scenes\scene_game.c">
+      <Filter>Source Files\scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scenes\scene_base.c">
+      <Filter>Source Files\scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\go\go_go.c">
+      <Filter>Source Files\go</Filter>
+    </ClCompile>
+    <ClCompile Include="src\go\go_base.c">
+      <Filter>Source Files\go</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\platform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\minstd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\app\base.h">
+      <Filter>Header Files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="include\api\sdl2.h">
+      <Filter>Header Files\api</Filter>
+    </ClInclude>
+    <ClInclude Include="include\app\sdl2.h">
+      <Filter>Header Files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ren\sdl2.h">
+      <Filter>Header Files\ren</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ren\base.h">
+      <Filter>Header Files\ren</Filter>
+    </ClInclude>
+    <ClInclude Include="include\scenes\base.h">
+      <Filter>Header Files\scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\scenes\game.h">
+      <Filter>Header Files\scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\go\go.h">
+      <Filter>Header Files\go</Filter>
+    </ClInclude>
+    <ClInclude Include="include\go\base.h">
+      <Filter>Header Files\go</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
