@@ -22,10 +22,16 @@ void scene_loading_on_update(SceneLoading* this) {
 
 void scene_loading_on_draw(SceneLoading* this) {
 	Tex* bg_tex = fs->tex[RES_PNG("game_bg_01_001.png")];
+	Tex* rob_tex = fs->tex[RES_PNG("RobTopLogoBig_001.png")];
+	Tex* logo = fs->tex[RES_PNG("GJ_logo_001.png")];
 	if (bg_tex) {
 		ren->tex_col(bg_tex, &RGBA(40, 62, 255, 255));
 		ren->copy_sc(bg_tex, &POINT(ren->vs.w / 2.0f, ren->vs.h / 2.0f), 1.3f, 1.3f);
 	}
+	if (rob_tex)
+		ren->copy(rob_tex, &POINT(ren->vs.w / 2.f, ren->vs.h / 4.f));
+	if (logo)
+		ren->copy(logo, &POINT(ren->vs.w / 2.f, ren->vs.h / 2.f));
 }
 
 void scene_loading_on_stop(SceneLoading* this) {

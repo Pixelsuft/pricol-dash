@@ -9,15 +9,8 @@ RenSDL2* ren_sdl2;
 
 TexSDL2* ren_sdl2_tex_dup(TexSDL2* tex) {
 	TexSDL2* res = m_alloc(sizeof(TexSDL2));
-	res->tex = tex->tex;
+	MEMCPY(res, tex, sizeof(TexSDL2));
 	res->parent.is_sub = true;
-	res->parent.size.w = tex->parent.size.w;
-	res->parent.size.h = tex->parent.size.h;
-	res->parent.real_src.x = tex->parent.real_src.x;
-	res->parent.real_src.y = tex->parent.real_src.y;
-	res->parent.real_src.w = tex->parent.real_src.w;
-	res->parent.real_src.h = tex->parent.real_src.h;
-	res->parent.real_rot = tex->parent.real_rot;
 	return res;
 }
 
@@ -119,7 +112,9 @@ void ren_sdl2_tex_col(TexSDL2* tex, const Color* col) {
 void ren_sdl2_copy(TexSDL2* tex, const Point* dst) {
 	if (tex->parent.is_sub) {
 		SDL_FRect dst_rect = { dst->x - tex->parent.size.w / 2.0f, dst->y - tex->parent.size.h / 2.0f, tex->parent.size.w, tex->parent.size.h };
+		// SINFO("%f %f %f %f", tex->parent.real_src.w, tex->parent.real_src.h, dst_rect.w, dst_rect.h);
 		SDL_Rect src_rect = { (int)tex->parent.real_src.x, (int)tex->parent.real_src.y, (int)tex->parent.real_src.w, (int)tex->parent.real_src.h };
+		SDL_FPoint origin = { 0.0f, 0.0f };
 		SDL_RenderCopyExF(ren_sdl2->ren, tex->tex, &src_rect, &dst_rect, (double)tex->parent.real_rot, NULL, SDL_FLIP_NONE);
 	}
 	else {

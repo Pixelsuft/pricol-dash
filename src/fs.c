@@ -103,27 +103,31 @@ void fs_load_sheet(const char* fn, int id, int png_id) {
 		name_buf = xml_node_content(xml_node_child(data, 1));
 		xml_string_copy(name_buf, xbuf, xml_string_length(name_buf));
 		xbuf[xml_string_length(name_buf)] = '\0';
-		SINFO("%s", xbuf);
-		// Offset
-		name_buf = xml_node_content(xml_node_child(data, 3));
-		xml_string_copy(name_buf, xbuf, xml_string_length(name_buf));
-		xbuf[xml_string_length(name_buf)] = '\0';
-		SINFO("%s", xbuf);
+		int rect_buf[4];
+		SASSERT(SSCANF(xbuf, "{{%i,%i},{%i,%i}}", &rect_buf[0], &rect_buf[1], &rect_buf[2], &rect_buf[3]) == 4);
 		// Rotated
 		name_buf = xml_node_name(xml_node_child(data, 5));
 		xml_string_copy(name_buf, xbuf, xml_string_length(name_buf));
 		xbuf[xml_string_length(name_buf)] = '\0';
-		SINFO("%s", xbuf);
-		// Source Color
-		name_buf = xml_node_content(xml_node_child(data, 7));
-		xml_string_copy(name_buf, xbuf, xml_string_length(name_buf));
-		xbuf[xml_string_length(name_buf)] = '\0';
-		SINFO("%s", xbuf);
-		// Source Size
-		name_buf = xml_node_content(xml_node_child(data, 9));
-		xml_string_copy(name_buf, xbuf, xml_string_length(name_buf));
-		xbuf[xml_string_length(name_buf)] = '\0';
-		SINFO("%s", xbuf);
+		// Magic
+		bool rotated = xbuf[0] == 't' || xbuf[1] == 't';
+		res->is_sub = true;
+		res->real_src.x = (float)rect_buf[0];
+		res->real_src.y = (float)rect_buf[1];
+		if (rotated) {
+			res->real_rot = -90.f;
+			res->real_src.w = (float)rect_buf[3];
+			res->real_src.h = (float)rect_buf[2];
+			res->size.w = (float)rect_buf[3] / ren->t_sc;
+			res->size.h = (float)rect_buf[2] / ren->t_sc;
+		}
+		else {
+			res->real_rot = 0.f;
+			res->real_src.w = (float)rect_buf[2];
+			res->real_src.h = (float)rect_buf[3];
+			res->size.w = (float)rect_buf[2] / ren->t_sc;
+			res->size.h = (float)rect_buf[3] / ren->t_sc;
+		}
 	}
 }
 

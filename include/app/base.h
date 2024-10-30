@@ -33,6 +33,7 @@
 #define STRNLEN(str, n) SDL_strlen(str)
 #define STRNEQ(str1, str2, n) (SDL_strncmp(str1, str2, n) == 0)
 #define STRNCPY(dst, src, maxlen) SDL_strlcpy(dst, src, maxlen)
+#define SSCANF(text, fmt, ...) SDL_sscanf(text, fmt, __VA_ARGS__)
 
 typedef struct Scene Scene;
 
