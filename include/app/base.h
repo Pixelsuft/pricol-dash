@@ -18,6 +18,8 @@
 #define ATOI(str) SDL_atoi(str)
 #define ATOF(str) (float)SDL_atof(str)
 #define MEMSET(dst, c, len) SDL_memset(dst, c, len)
+#define STRNLEN(str, n) SDL_strlen(str)
+#define STRNEQ(str1, str2, n) (SDL_strncmp(str1, str2, n) == 0)
 
 typedef struct Scene Scene;
 

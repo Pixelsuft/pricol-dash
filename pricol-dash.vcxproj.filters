@@ -43,6 +43,9 @@
     <Filter Include="Source Files\go">
       <UniqueIdentifier>{9eab5028-57ae-4560-a1fe-b952efdd1d2d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\gen">
+      <UniqueIdentifier>{f4bb4498-c69b-452d-81dd-6a25365181e5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.c">
@@ -112,6 +115,9 @@
     </ClInclude>
     <ClInclude Include="include\go\base.h">
       <Filter>Header Files\go</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gen\res_map.h">
+      <Filter>Header Files\gen</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
