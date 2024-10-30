@@ -1,6 +1,5 @@
 #include <fs.h>
 #include <app/base.h>
-#include <gen/res_map.h>
 
 FileSystem* fs;
 

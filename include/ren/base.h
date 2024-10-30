@@ -4,6 +4,10 @@
 #include <minstd.h>
 
 typedef struct {
+	Point size;
+} Tex;
+
+typedef struct {
 	bool (*init)(void);
 	void (*quit)(void);
 	void (*on_resize)(void);
