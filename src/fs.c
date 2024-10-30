@@ -142,7 +142,8 @@ void fs_load_fnt(const char* fn, int id, int png_id) {
 	char* buf = app->read_res_file(fn, &size);
 	if (buf == NULL)
 		return;
-	bmfont_init(&fs->fnt[id], buf, size, png_id);
+	bmfont_init(&fs->fnt[id], buf, size);
+	fs->fnt[id].page = fs->tex[png_id];
 	m_free(buf);
 	fs->progress++;
 }

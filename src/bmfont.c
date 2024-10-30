@@ -9,9 +9,33 @@ void bmfont_destroy(BMFont* this) {
 	array_destroy(&this->chars);
 }
 
-void bmfont_init(BMFont* this, char* buf, size_t size, int png_id) {
+void bmfont_calc_line_size(BMFont* this, const char* text, size_t text_len, Point* size_buf) {
+	size_buf->x = 0.0f;
+	size_buf->y = (float)this->line_height * this->sy;
+	int last_chr = 0;
+	for (size_t i = 0; i < text_len; i++) {
+		size_t chr = (size_t)text[i]; // TODO: utf-8 support
+		if ((chr > this->chars.len) || ((this->chars.data[chr].w <= 0) && (this->chars.data[chr].xa < 0)))
+			continue;
+		size_buf->x += (float)this->chars.data[chr].xa;
+		if (i > 0 && this->chars.data[chr].ks.data != NULL) {
+			for (size_t j = 0; j < this->chars.data[chr].ks.len; j += 2) {
+				if (this->chars.data[chr].ks.data[j] == last_chr) {
+					size_buf->x += (float)this->chars.data[chr].ks.data[i + 1];
+					break;
+				}
+			}
+		}
+		last_chr = (int)chr;
+	}
+	size_buf->x *= this->sx;
+	size_buf->x /= ren->t_sc;
+}
+
+void bmfont_init(BMFont* this, char* buf, size_t size) {
 	// Assuming buf ends with '\n'
-	int isc = ren->t_sc == 2.0f ? 1 : 0;
+	this->sx = this->sy = 1.f;
+	int isc = ren->t_sc == 2.f ? 1 : 0;
 	char* iter = buf;
 	while (1) {
 		char* tmp_iter = iter;

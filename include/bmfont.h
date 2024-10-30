@@ -24,8 +24,11 @@ typedef struct {
     Array(BMChar) chars;
     Tex* page;
     size_t ch_count;
+    float sx;
+    float sy;
     int line_height;
 } BMFont;
 
-void bmfont_init(BMFont* this, char* buf, size_t size, int png_id);
+void bmfont_init(BMFont* this, char* buf, size_t size);
 void bmfont_destroy(BMFont* this);
+void bmfont_calc_line_size(BMFont* this, const char* text, size_t text_len, Point* size_buf);
