@@ -8,6 +8,7 @@
 #endif
 #include <spng.h>
 #include <minstd.h>
+#include <fs.h>
 #include <ren/base.h>
 #define LOG_ALLOC DEBUG
 
@@ -212,7 +213,8 @@ void app_sdl2_poll_events(void) {
 	while (SDL_PollEvent(&app_sdl2->ev)) {
 		switch (app_sdl2->ev.type) {
 		case SDL_QUIT: {
-			app->stop();
+			if (DEBUG || !fs->running)
+				app->stop();
 			break;
 		}
 		case SDL_WINDOWEVENT: {

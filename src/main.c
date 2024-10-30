@@ -31,6 +31,7 @@ bool main_func(void) {
     start_scene->on_init(start_scene);
     app->run_scene(start_scene);
     app->run();
+    fs_destroy();
     ret = false;
     goto ex4;
 ex4:
@@ -38,7 +39,6 @@ ex4:
 ex3:
     ren->destroy();
 ex2:
-    fs_destroy();
     app->quit();
 ex1:
     app->destroy();

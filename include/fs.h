@@ -6,9 +6,11 @@
 typedef struct {
 	Tex* tex[MAX_RES_PNG];
 	void* temp_surf;
+	Tex* temp_tex;
 	void* thread_h;
 	int progress;
 	int total_count;
+	bool temp_no_scale;
 	bool threaded;
 	bool running;
 } FileSystem;

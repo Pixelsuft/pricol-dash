@@ -15,7 +15,7 @@ typedef struct {
 	void (*on_resize)(void);
 	void (*destroy)(void);
 	void (*draw_scene)(void);
-	Tex* (*tex_from_surf)(void* surf);
+	Tex* (*tex_from_surf)(void* surf, bool no_scale);
 	void (*tex_destroy)(Tex* tex);
 	void (*fill_rect_s)(const Rect* rect, const Color* col);
 	Point size;

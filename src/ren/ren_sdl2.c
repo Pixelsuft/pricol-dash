@@ -17,7 +17,7 @@ void ren_sdl2_tex_destroy(TexSDL2* tex) {
 	m_free(tex);
 }
 
-TexSDL2* ren_sdl2_tex_from_surf(void* surf) {
+TexSDL2* ren_sdl2_tex_from_surf(void* surf, bool no_scale) {
 	// Assuming it's SDL_surface
 	TexSDL2* res = m_alloc(sizeof(TexSDL2));
 	SDL_Texture* tex = SDL_CreateTextureFromSurface(ren_sdl2->ren, (SDL_Surface*)surf);
@@ -26,11 +26,17 @@ TexSDL2* ren_sdl2_tex_from_surf(void* surf) {
 	}
 	res->tex = tex;
 	res->parent.is_sub = false;
-	res->parent.size.w = SDL_roundf((float)((SDL_Surface*)surf)->w / ren->t_sc);
-	res->parent.size.h = SDL_roundf((float)((SDL_Surface*)surf)->h / ren->t_sc);
+	if (no_scale) {
+		res->parent.size.w = (float)((SDL_Surface*)surf)->w;
+		res->parent.size.h = (float)((SDL_Surface*)surf)->h;
+	}
+	else {
+		res->parent.size.w = SDL_roundf((float)((SDL_Surface*)surf)->w / ren->t_sc);
+		res->parent.size.h = SDL_roundf((float)((SDL_Surface*)surf)->h / ren->t_sc);
+	}
 	res->parent.real_src.x = res->parent.real_src.y = 0.f;
-	res->parent.real_src.w = res->parent.size.w;
-	res->parent.real_src.h = res->parent.size.h;
+	res->parent.real_src.w = (float)((SDL_Surface*)surf)->w;
+	res->parent.real_src.h = (float)((SDL_Surface*)surf)->h;
 	return res;
 }
 
