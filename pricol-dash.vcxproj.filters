@@ -87,6 +87,12 @@
     <ClCompile Include="src\xml.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\bmfont.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\array.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\platform.h">
@@ -132,6 +138,12 @@
       <Filter>Header Files\scenes</Filter>
     </ClInclude>
     <ClInclude Include="include\fs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bmfont.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\array.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

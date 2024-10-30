@@ -8,6 +8,7 @@
 #else
 #define m_alloc(size) (app->memory_alloc((size_t)(size)))
 #endif
+#define m_realloc(ptr, new_size) (app->memory_realloc(ptr, new_size))
 #define m_free(ptr) (app->memory_free(ptr))
 // TODO
 #define f_alloc(size) m_alloc(size)
@@ -29,6 +30,7 @@
 #define ATOF(str) (float)SDL_atof(str)
 #define MEMSET(dst, c, len) SDL_memset(dst, c, len)
 #define MEMCPY(dst, src, len) SDL_memcpy(dst, src, len)
+#define MEMMOVE(dst, src, len) SDL_memmove(dst, src, len)
 #define STRLEN(str) SDL_strlen(str)
 #define STRNLEN(str, n) SDL_strlen(str)
 #define STRNEQ(str1, str2, n) (SDL_strncmp(str1, str2, n) == 0)
@@ -56,6 +58,7 @@ typedef struct {
 #else
 	void* (*memory_alloc)(size_t size);
 #endif
+	void* (*memory_realloc)(void* ptr, size_t new_size);
 	void (*memory_free)(void* ptr);
 	void (*run_scene)(Scene* scene);
 	void* (*load_surf)(const char* fp);

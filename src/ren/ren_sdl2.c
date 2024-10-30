@@ -97,9 +97,13 @@ void ren_sdl2_on_resize(void) {
 		ren->size.w = (float)w_buf;
 		ren->size.h = (float)h_buf;
 	}
-	ren->scale = ren->size.h / 360.f; // Scale by Y
-	ren->vs.h = 360.f;
-	ren->vs.w = ren->size.w / ren->scale;
+	SASSERT(ren->size.w >= ren->size.h);
+	// ren->scale = ren->size.h / 360.f; // Scale by Y
+	// ren->vs.h = 360.f;
+	// ren->vs.w = ren->size.w / ren->scale;
+	ren->scale = ren->size.w / 640.f; // Scale by X
+	ren->vs.w = 640.f;
+	ren->vs.h = ren->size.h / ren->scale;
 	SDL_RenderSetScale(ren_sdl2->ren, ren->scale, ren->scale);
 	SLOG_INFO("Size [%ix%i] [%ix%i]", w_buf, h_buf, (int)ren->vs.w, (int)ren->vs.h);
 }

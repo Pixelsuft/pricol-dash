@@ -296,6 +296,25 @@ void app_sdl2_memory_free(void* ptr) {
 #endif
 }
 
+void* app_sdl2_memory_realloc(void* ptr, size_t new_size) {
+#if DEBUG
+	if (ptr == NULL) {
+		return m_alloc(new_size);
+	}
+	MemDebugInfo* info_p = (MemDebugInfo*)((size_t)ptr - sizeof(MemDebugInfo));
+	if (info_p == NULL) {
+		return m_alloc(new_size);
+	}
+#if LOG_ALLOC
+	SLOG_INFO("[FREE] %s:%i (%s)", info_p->func_name, (int)info_p->line, info_p->file_path);
+#endif
+	MemDebugInfo* res = SDL_realloc(info_p, new_size + sizeof(MemDebugInfo));
+	return (void*)((size_t)res + sizeof(MemDebugInfo));
+#else
+	return SDL_realloc(ptr, new_size);
+#endif
+}
+
 bool app_sdl2_create(void) {
 	app_sdl2 = general_malloc(sizeof(AppSDL2));
 	app = (App*)app_sdl2;
@@ -315,6 +334,7 @@ bool app_sdl2_create(void) {
 	app->poll_events = app_sdl2_poll_events;
 	app->on_resize = app_sdl2_on_resize;
 	app->memory_alloc = app_sdl2_memory_alloc;
+	app->memory_realloc = app_sdl2_memory_realloc;
 	app->memory_free = app_sdl2_memory_free;
 	app->clock_reset = app_sdl2_clock_reset;
 	app->clock_update = app_sdl2_clock_update;

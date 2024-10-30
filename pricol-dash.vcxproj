@@ -149,6 +149,8 @@
   <ItemGroup>
     <ClCompile Include="src\app\app_base.c" />
     <ClCompile Include="src\app\app_sdl2.c" />
+    <ClCompile Include="src\array.c" />
+    <ClCompile Include="src\bmfont.c" />
     <ClCompile Include="src\fs.c" />
     <ClCompile Include="src\go\go_base.c" />
     <ClCompile Include="src\go\go_go.c" />
@@ -165,6 +167,8 @@
     <ClInclude Include="include\api\sdl2.h" />
     <ClInclude Include="include\app\base.h" />
     <ClInclude Include="include\app\sdl2.h" />
+    <ClInclude Include="include\array.h" />
+    <ClInclude Include="include\bmfont.h" />
     <ClInclude Include="include\config.h" />
     <ClInclude Include="include\fs.h" />
     <ClInclude Include="include\gen\res_map.h" />
