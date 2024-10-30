@@ -20,6 +20,8 @@ typedef struct {
 	double c_freq;
 	SDL_Event ev;
 	SDL_Window* win;
+	size_t cwd_base_size;
+	char* cwd_buf;
 } AppSDL2;
 
 extern AppSDL2* app_sdl2;

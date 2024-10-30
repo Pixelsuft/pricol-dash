@@ -6,11 +6,123 @@
 #else
 #include <SDL_syswm.h>
 #endif
+#include <spng.h>
 #include <minstd.h>
 #include <ren/base.h>
 #define LOG_ALLOC DEBUG
 
 AppSDL2* app_sdl2;
+
+char* app_sdl2_read_res_file(const char* fp, size_t* size) {
+	if (size)
+		*size = 0;
+	STRNCPY(app_sdl2->cwd_buf + app_sdl2->cwd_base_size, fp, 216);
+	SDL_RWops* file = SDL_RWFromFile(app_sdl2->cwd_buf, "rb");
+	if (file == NULL) {
+		SLOG_ERROR("Failed to load file %s (%s)", fp, SDL_GetError());
+		return NULL;
+	}
+	Sint64 size_buf = SDL_RWsize(file);
+	if (size_buf <= 0) {
+		SLOG_ERROR("Failed to get size for file %s (%s)", fp, SDL_GetError());
+		SDL_RWclose(file);
+		return NULL;
+	}
+	char* buf = m_alloc(size_buf);
+	if (buf == NULL) {
+		SDL_RWclose(file);
+		return NULL;
+	}
+	if (size)
+		*size = (size_t)size_buf;
+	if (SDL_RWread(file, (void*)buf, 1, (size_t)size_buf) != (size_t)size_buf) {
+		SLOG_ERROR("Failed to read file %s (%s)", fp, SDL_GetError());
+		m_free(buf);
+		SDL_RWclose(file);
+		return NULL;
+	}
+	SDL_RWclose(file);
+	return buf;
+}
+
+void app_sdl2_free_surf(SDL_Surface* surf) {
+	SDL_free(surf);
+}
+
+SDL_Surface* app_sdl2_create_error_surf(void) {
+	SDL_Surface* result = SDL_CreateRGBSurfaceWithFormat(0, 2, 2, 32, SDL_PIXELFORMAT_RGB888);
+	if (SDL_MUSTLOCK(result))
+		SDL_LockSurface(result);
+	((Uint32*)result->pixels)[0] = ((Uint32*)result->pixels)[3] = (SDL_BYTEORDER == SDL_BIG_ENDIAN) ? 0xF93EFB : 0xFB3EF9;
+	((Uint32*)result->pixels)[1] = ((Uint32*)result->pixels)[2] = 0;
+	if (SDL_MUSTLOCK(result))
+		SDL_UnlockSurface(result);
+	return result;
+}
+
+SDL_Surface* app_sdl2_load_surf(const char* fp) {
+	if (fp == NULL)
+		return app_sdl2_create_error_surf();
+	size_t buf_size;
+	char* buf = app->read_res_file(fp, &buf_size);
+	if (buf == NULL)
+		return NULL;
+	spng_ctx* ctx = spng_ctx_new(0);
+	if (ctx == NULL) {
+		SLOG_ERROR("Failed to create SPNG ctx");
+		m_free(buf);
+		return NULL;
+	}
+	int err = spng_set_png_buffer(ctx, (const void*)buf, buf_size);
+	if (err != SPNG_OK) {
+		SLOG_ERROR("Failed to set SPNG buffer (%s)", spng_strerror(err));
+		spng_ctx_free(ctx);
+		m_free(buf);
+		return NULL;
+	}
+	size_t img_size = 0;
+	int img_fmt = SPNG_FMT_RGBA8;
+	err = spng_decoded_image_size(ctx, img_fmt, &img_size);
+	if (err != SPNG_OK) {
+		SLOG_ERROR("Failed to get SPNG image size (%s)", spng_strerror(err));
+		spng_ctx_free(ctx);
+		m_free(buf);
+		return NULL;
+	}
+	struct spng_ihdr ihdr;
+	err = spng_get_ihdr(ctx, &ihdr);
+	if (err != SPNG_OK) {
+		SLOG_ERROR("Failed to get SPNG image ihdr (%s)", spng_strerror(err));
+		spng_ctx_free(ctx);
+		m_free(buf);
+		return NULL;
+	}
+	SDL_Surface* surf = SDL_CreateRGBSurfaceWithFormat(
+		0, ihdr.width, ihdr.height,
+		ihdr.bit_depth, SDL_PIXELFORMAT_ABGR8888
+	);
+	if (surf == NULL) {
+		SLOG_ERROR("Failed create SDL surface (%s)", SDL_GetError());
+		spng_ctx_free(ctx);
+		m_free(buf);
+		return NULL;
+	}
+	if (SDL_MUSTLOCK(surf))
+		SDL_LockSurface(surf);
+	err = spng_decode_image(ctx, surf->pixels, img_size, img_fmt, 0);
+	if (SDL_MUSTLOCK(surf))
+		SDL_UnlockSurface(surf);
+	if (err != SPNG_OK) {
+		SLOG_ERROR("Failed to read SPNG image (%s)", spng_strerror(err));
+		SDL_FreeSurface(surf);
+		spng_ctx_free(ctx);
+		m_free(buf);
+		return NULL;
+	}
+	spng_ctx_free(ctx);
+	m_free(buf);
+	return surf;
+}
 
 void app_sdl2_destroy(void) {
 	SDL_Quit();
@@ -38,6 +150,13 @@ bool app_sdl2_init(void) {
 		app->cwd[1] = '/';
 		app->cwd[2] = '\0';
 	}
+	app_sdl2->cwd_base_size = STRLEN(app->cwd);
+	app_sdl2->cwd_buf = m_alloc(app_sdl2->cwd_base_size + 256);
+	MEMCPY(app_sdl2->cwd_buf, app->cwd, app_sdl2->cwd_base_size);
+	MEMCPY(app_sdl2->cwd_buf + app_sdl2->cwd_base_size, "assets", 6);
+	app_sdl2->cwd_buf[app_sdl2->cwd_base_size + 6] = IS_WIN ? '\\' : '/';
+	app_sdl2->cwd_buf[app_sdl2->cwd_base_size + 7] = '\0';
+	app_sdl2->cwd_base_size += 7;
 	app_sdl2->c_freq = (double)SDL_GetPerformanceFrequency();
 	return false;
 }
@@ -57,6 +176,7 @@ void app_sdl2_clock_update(void) {
 }
 
 void app_sdl2_quit(void) {
+	m_free(app_sdl2->cwd_buf);
 	SDL_free(app->cwd);
 	SDL_DestroyWindow(app_sdl2->win);
 }
@@ -195,6 +315,9 @@ bool app_sdl2_create(void) {
 	app->memory_free = app_sdl2_memory_free;
 	app->clock_reset = app_sdl2_clock_reset;
 	app->clock_update = app_sdl2_clock_update;
+	app->read_res_file = app_sdl2_read_res_file;
+	FCAST(app->load_surf, app_sdl2_load_surf);
+	FCAST(app->free_surf, app_sdl2_free_surf);
 	return false;
 }
 #endif

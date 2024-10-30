@@ -18,8 +18,11 @@
 #define ATOI(str) SDL_atoi(str)
 #define ATOF(str) (float)SDL_atof(str)
 #define MEMSET(dst, c, len) SDL_memset(dst, c, len)
+#define MEMCPY(dst, src, len) SDL_memcpy(dst, src, len)
+#define STRLEN(str) SDL_strlen(str)
 #define STRNLEN(str, n) SDL_strlen(str)
 #define STRNEQ(str1, str2, n) (SDL_strncmp(str1, str2, n) == 0)
+#define STRNCPY(dst, src, maxlen) SDL_strlcpy(dst, src, maxlen)
 
 typedef struct Scene Scene;
 
@@ -44,6 +47,9 @@ typedef struct {
 #endif
 	void (*memory_free)(void* ptr);
 	void (*run_scene)(Scene* scene);
+	void* (*load_surf)(const char* fp);
+	void (*free_surf)(void* surf);
+	char* (*read_res_file)(const char* fp, size_t* size);
 	Point size;
 	double d_dt;
 	Scene* sc;

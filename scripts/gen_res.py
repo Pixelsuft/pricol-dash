@@ -14,7 +14,7 @@ sheet_files = []
 plist_files = []
 
 for i in ld:
-    if '-hd' in i:
+    if '-hd' in i or i == 'fps_images-ipadhd.png':
         continue
     fp = os.path.join(cwd, 'assets', i)
     if i.endswith('.png'):
