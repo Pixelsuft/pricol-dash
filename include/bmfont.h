@@ -24,7 +24,6 @@ typedef struct {
     Array(BMChar) chars;
     Tex* page;
     size_t ch_count;
-    size_t k_count;
     int line_height;
 } BMFont;
 
