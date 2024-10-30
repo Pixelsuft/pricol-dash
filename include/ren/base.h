@@ -5,6 +5,7 @@
 
 typedef struct {
 	Point size;
+	bool is_sub;
 } Tex;
 
 typedef struct {
@@ -18,6 +19,7 @@ typedef struct {
 	Point vs;
 	Point offset;
 	float scale;
+	float t_sc;
 } Ren;
 
 extern Ren* ren;

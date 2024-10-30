@@ -7,6 +7,7 @@ bool fs_create(void) {
 	fs = m_alloc(sizeof(FileSystem));
 	if (fs == NULL)
 		return true;
+	MEMSET(fs->tex, 0, sizeof(fs->tex));
 	return false;
 }
 
