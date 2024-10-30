@@ -13,10 +13,18 @@
 #define f_alloc(size) m_alloc(size)
 #define f_free(ptr) m_free(ptr)
 
-// TODO: call from class App
+// TODO: call from class App, don't depend on SDL2
+
 #define SINFO(...) SLOG_INFO(__VA_ARGS__)
 #define SWARN(...) SLOG_WARN(__VA_ARGS__)
 #define SERR(...) SLOG_ERROR(__VA_ARGS__)
+#if DEBUG
+#define SASSERT(cond) do { \
+	sdl2_assertion_check(__FILE__, __func__, __LINE__, (cond)); \
+} while (0)
+#else
+#define SASSERT(cond) do {} while (0)
+#endif
 #define ATOI(str) SDL_atoi(str)
 #define ATOF(str) (float)SDL_atof(str)
 #define MEMSET(dst, c, len) SDL_memset(dst, c, len)

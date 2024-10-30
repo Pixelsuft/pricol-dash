@@ -252,9 +252,9 @@ void* app_sdl2_memory_alloc(size_t size) {
 	}
 	char* f_end = (char*)((size_t)file_path + SDL_strlen(file_path));
 	while (f_end >= file_path) {
-		f_end--;
 		if (*f_end == '\\' || *f_end == '/')
 			break;
+		f_end--;
 	}
 	f_end++;
 	MemDebugInfo* info_p = (MemDebugInfo*)res;
