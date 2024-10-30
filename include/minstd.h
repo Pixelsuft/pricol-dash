@@ -4,6 +4,7 @@
 #define UNUSED1(arg1) ((void)arg1)
 #define RGBA(_r, _g, _b, _a) ((Color){ .r = (float)(_r), .g = (float)(_g), .b = (float)(_b), .a = (float)(_a) })
 #define RECT(_x, _y, _w, _h) ((Rect){ .x = (float)(_x), .y = (float)(_y), .w = (float)(_w), .h = (float)(_h) })
+#define POINT(_x, _y) ((Point){ .x = (float)(_x), .y = (float)(_y)})
 #define FCAST(ptr1, ptr2) (void*)ptr1 = (void*)ptr2;
 
 typedef union {

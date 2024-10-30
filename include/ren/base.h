@@ -6,6 +6,7 @@
 typedef struct {
 	Point size;
 	Rect real_src;
+	int real_flip;
 	bool is_sub;
 } Tex;
 
@@ -18,6 +19,7 @@ typedef struct {
 	Tex* (*tex_from_surf)(void* surf, bool no_scale);
 	void (*tex_destroy)(Tex* tex);
 	void (*fill_rect_s)(const Rect* rect, const Color* col);
+	void (*copy_s)(Tex* tex, const Point* dst);
 	Point size;
 	Point vs;
 	Point offset;

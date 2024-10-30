@@ -37,6 +37,7 @@ TexSDL2* ren_sdl2_tex_from_surf(void* surf, bool no_scale) {
 	res->parent.real_src.x = res->parent.real_src.y = 0.f;
 	res->parent.real_src.w = (float)((SDL_Surface*)surf)->w;
 	res->parent.real_src.h = (float)((SDL_Surface*)surf)->h;
+	res->parent.real_flip = 0;
 	return res;
 }
 
@@ -96,6 +97,20 @@ void ren_sdl2_on_resize(void) {
 	SLOG_INFO("Size [%ix%i] [%ix%i]", w_buf, h_buf, (int)ren->vs.w, (int)ren->vs.h);
 }
 
+// TODO: transparency
+
+void ren_sdl2_copy_s(TexSDL2* tex, const Point* dst) {
+	if (tex->parent.is_sub) {
+		SDL_FRect dst_rect = { dst->x - tex->parent.size.w / 2.0f, dst->y - tex->parent.size.h / 2.0f, tex->parent.size.w, tex->parent.size.h };
+		SDL_Rect src_rect = { (int)tex->parent.real_src.x, (int)tex->parent.real_src.y, (int)tex->parent.real_src.w, (int)tex->parent.real_src.h };
+		SDL_RenderCopyExF(ren_sdl2->ren, tex->tex, &src_rect, &dst_rect, 0.0, NULL, (SDL_RendererFlip)tex->parent.real_flip);
+	}
+	else {
+		SDL_FRect dst_rect = { dst->x - tex->parent.size.w / 2.0f, dst->y - tex->parent.size.h / 2.0f, tex->parent.size.w, tex->parent.size.h };
+		SDL_RenderCopyF(ren_sdl2->ren, tex->tex, NULL, &dst_rect);
+	}
+}
+
 bool ren_sdl2_create(void) {
 	ren_sdl2 = m_alloc(sizeof(RenSDL2));
 	ren = (Ren*)ren_sdl2;
@@ -108,6 +123,7 @@ bool ren_sdl2_create(void) {
 	ren->fill_rect_s = ren_sdl2_fill_rect_s;
 	FCAST(ren->tex_from_surf, ren_sdl2_tex_from_surf);
 	FCAST(ren->tex_destroy, ren_sdl2_tex_destroy);
+	FCAST(ren->copy_s, ren_sdl2_copy_s);
 	return false;
 }
 #endif
