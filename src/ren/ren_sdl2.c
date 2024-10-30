@@ -97,8 +97,11 @@ void ren_sdl2_on_resize(void) {
 	SLOG_INFO("Size [%ix%i] [%ix%i]", w_buf, h_buf, (int)ren->vs.w, (int)ren->vs.h);
 }
 
-// TODO: transparency
+void ren_sdl2_tex_col(TexSDL2* tex, const Color* col) {
+	SDL_SetTextureColorMod(tex->tex, (Uint8)col->r, (Uint8)col->g, (Uint8)col->b);
+}
 
+// TODO: transparency
 void ren_sdl2_copy(TexSDL2* tex, const Point* dst) {
 	if (tex->parent.is_sub) {
 		SDL_FRect dst_rect = { dst->x - tex->parent.size.w / 2.0f, dst->y - tex->parent.size.h / 2.0f, tex->parent.size.w, tex->parent.size.h };
@@ -141,6 +144,7 @@ bool ren_sdl2_create(void) {
 	ren->fill_rect_s = ren_sdl2_fill_rect_s;
 	FCAST(ren->tex_from_surf, ren_sdl2_tex_from_surf);
 	FCAST(ren->tex_destroy, ren_sdl2_tex_destroy);
+	FCAST(ren->tex_col, ren_sdl2_tex_col);
 	FCAST(ren->copy, ren_sdl2_copy);
 	FCAST(ren->copy_sc, ren_sdl2_copy_sc);
 	return false;

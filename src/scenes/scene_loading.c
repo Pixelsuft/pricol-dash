@@ -24,6 +24,7 @@ void scene_loading_on_draw(SceneLoading* this) {
 	ren->fill_rect_s(&RECT(100, 100, 30, 30), &RGBA(255, 0, 0, 255));
 	Tex* bg_tex = fs->tex[RES_PNG("game_bg_01_001.png")];
 	if (bg_tex) {
+		ren->tex_col(bg_tex, &RGBA(40, 62, 255, 255));
 		ren->copy_sc(bg_tex, &POINT(ren->vs.w / 2.0f, ren->vs.h / 2.0f), 1.3f, 1.3f);
 	}
 }

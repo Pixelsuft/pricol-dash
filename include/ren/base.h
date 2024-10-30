@@ -18,6 +18,7 @@ typedef struct {
 	void (*draw_scene)(void);
 	Tex* (*tex_from_surf)(void* surf, bool no_scale);
 	void (*tex_destroy)(Tex* tex);
+	void (*tex_col)(Tex* tex, const Color* col);
 	void (*fill_rect_s)(const Rect* rect, const Color* col);
 	void (*copy)(Tex* tex, const Point* dst);
 	void (*copy_sc)(Tex* tex, const Point* dst, float sx, float sy);
