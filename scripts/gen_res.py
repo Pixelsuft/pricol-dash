@@ -48,6 +48,7 @@ def write_map_for(id_str: str, val: any) -> None:
         f.write(f'   else if (STRNEQ(file_name, "{i}", {mx_len})) return {n};\n')
     f.write('   else return -1;\n}\n\n')
     f.write(f'#define RES_{id_str.upper()}(file_name) get_{id_str}_id(file_name)\n')
+    f.write(f'#define MAX_RES_{id_str.upper()} {len(val)}\n')
 
 f = open(os.path.join(cwd, 'include', 'gen', 'res_map.h'), 'w', encoding='utf-8')
 f.write('#pragma once\n#include <app/base.h>\n')

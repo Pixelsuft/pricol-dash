@@ -9,6 +9,7 @@
 #endif
 #include <app/base.h>
 #include <ren/base.h>
+#include <fs.h>
 #include <scenes/base.h>
 
 bool main_func(void) {
@@ -19,6 +20,7 @@ bool main_func(void) {
 #endif
     if (app->init())
         goto ex1;
+    fs_create();
 #if SDL2_ENABLE
     if (ren_sdl2_create())
         goto ex2;
@@ -36,6 +38,7 @@ ex4:
 ex3:
     ren->destroy();
 ex2:
+    fs_destroy();
     app->quit();
 ex1:
     app->destroy();

@@ -284,7 +284,7 @@ static int get_png_id(const char* file_name) {
 }
 
 #define RES_PNG(file_name) get_png_id(file_name)
-
+#define MAX_RES_PNG 276
 static int get_mp3_id(const char* file_name) {
    if (0) return -1;
    else if (STRNEQ(file_name, "BackOnTrack.mp3", 18)) return 0;
@@ -300,7 +300,7 @@ static int get_mp3_id(const char* file_name) {
 }
 
 #define RES_MP3(file_name) get_mp3_id(file_name)
-
+#define MAX_RES_MP3 9
 static int get_ogg_id(const char* file_name) {
    if (0) return -1;
    else if (STRNEQ(file_name, "achievement_01.ogg", 19)) return 0;
@@ -312,7 +312,7 @@ static int get_ogg_id(const char* file_name) {
 }
 
 #define RES_OGG(file_name) get_ogg_id(file_name)
-
+#define MAX_RES_OGG 5
 static int get_fnt_id(const char* file_name) {
    if (0) return -1;
    else if (STRNEQ(file_name, "bigFont.fnt", 13)) return 0;
@@ -322,7 +322,7 @@ static int get_fnt_id(const char* file_name) {
 }
 
 #define RES_FNT(file_name) get_fnt_id(file_name)
-
+#define MAX_RES_FNT 3
 static int get_sheet_id(const char* file_name) {
    if (0) return -1;
    else if (STRNEQ(file_name, "CCControlColourPickerSpriteSheet.plist", 39)) return 0;
@@ -332,7 +332,7 @@ static int get_sheet_id(const char* file_name) {
 }
 
 #define RES_SHEET(file_name) get_sheet_id(file_name)
-
+#define MAX_RES_SHEET 3
 static int get_plist_id(const char* file_name) {
    if (0) return -1;
    else if (STRNEQ(file_name, "AchievementsDesc.plist", 24)) return 0;
@@ -367,3 +367,4 @@ static int get_plist_id(const char* file_name) {
 }
 
 #define RES_PLIST(file_name) get_plist_id(file_name)
+#define MAX_RES_PLIST 28

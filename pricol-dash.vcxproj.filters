@@ -81,6 +81,9 @@
     <ClCompile Include="src\scenes\scene_loading.c">
       <Filter>Source Files\scenes</Filter>
     </ClCompile>
+    <ClCompile Include="src\fs.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\platform.h">
@@ -124,6 +127,9 @@
     </ClInclude>
     <ClInclude Include="include\scenes\loading.h">
       <Filter>Header Files\scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fs.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
