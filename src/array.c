@@ -1,8 +1,11 @@
+#define ARRAY_IMPL
 #include <array.h>
 #include <app/base.h>
 #include <app/sdl2.h>
 
 // TODO: support fast allocator
+
+
 
 bool array_destroy(ArrayBase* this) {
     if (this->data == NULL)

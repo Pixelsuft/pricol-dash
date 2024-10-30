@@ -1,12 +1,13 @@
 #pragma once
 #include <stdint.h>
 #include <stdbool.h>
+#include <array.h>
 #include <ren/base.h>
 
 struct Tex;
 
 typedef struct {
-    // OMG_Array(int) ks;
+    Array(int) ks;
     // Pos
     int x;
     int y;
@@ -20,7 +21,7 @@ typedef struct {
 } BMChar;
 
 typedef struct {
-    BMChar chars[256];
+    Array(BMChar) chars;
     Tex* page;
     size_t ch_count;
     size_t k_count;
