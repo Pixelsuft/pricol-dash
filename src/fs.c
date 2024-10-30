@@ -133,9 +133,14 @@ void fs_load_sheet(const char* fn, int id, int png_id) {
 
 int SDLCALL fs_thread_func(void* data) {
 	UNUSED1(data);
+	// First of all, loading screen
 	LOAD_PNG("game_bg_01_001");
 	LOAD_PNG("GJ_LaunchSheet");
+	LOAD_SHEET("GJ_LaunchSheet");
 	LOAD_PNG("goldFont");
+	LOAD_PNG("sliderBar");
+	LOAD_PNG("slidergroove");
+	// Continue
 	LOAD_PNG("bigFont");
 	LOAD_PNG("chatFont");
 	LOAD_PNG("floor");
@@ -153,14 +158,11 @@ int SDLCALL fs_thread_func(void* data) {
 	LOAD_PNG("gravityOverlay");
 	LOAD_PNG("groundSquare_001");
 	LOAD_PNG("loadingCircle");
-	LOAD_PNG("sliderBar");
-	LOAD_PNG("slidergroove");
 	LOAD_PNG("slidergroove_02");
 	LOAD_PNG("sliderthumb");
 	LOAD_PNG("sliderthumbsel");
 	LOAD_PNG("smallDot");
 	LOAD_PNG("square01_001");
-	LOAD_SHEET("GJ_LaunchSheet");
 	SLOG_INFO("Loading ended!!");
 	fs->running = false;
 	return 0;
