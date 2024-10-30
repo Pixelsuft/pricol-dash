@@ -31,6 +31,9 @@ TexSDL2* ren_sdl2_tex_from_surf(void* surf, bool no_scale) {
 	if (tex == NULL) {
 		SLOG_ERROR("Failed to create SDL2 texture from surface (%s)", SDL_GetError());
 	}
+	else {
+		SDL_SetTextureScaleMode(tex, SDL_ScaleModeLinear);
+	}
 	res->tex = tex;
 	res->parent.is_sub = false;
 	if (no_scale) {

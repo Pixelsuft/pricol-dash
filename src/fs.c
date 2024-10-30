@@ -155,6 +155,7 @@ int SDLCALL fs_thread_func(void* data) {
 	LOAD_PNG("GJ_LaunchSheet");
 	LOAD_SHEET("GJ_LaunchSheet");
 	LOAD_PNG("goldFont");
+	LOAD_FNT("goldFont");
 	LOAD_PNG("sliderBar");
 	LOAD_PNG("slidergroove");
 	// Continue
@@ -180,7 +181,6 @@ int SDLCALL fs_thread_func(void* data) {
 	LOAD_PNG("sliderthumbsel");
 	LOAD_PNG("smallDot");
 	LOAD_PNG("square01_001");
-	LOAD_FNT("goldFont");
 	SLOG_INFO("Loading ended!!");
 	fs->running = false;
 	return 0;
