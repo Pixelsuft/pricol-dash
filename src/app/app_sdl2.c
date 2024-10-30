@@ -46,7 +46,7 @@ char* app_sdl2_read_res_file(const char* fp, size_t* size) {
 }
 
 void app_sdl2_free_surf(SDL_Surface* surf) {
-	SDL_free(surf);
+	SDL_FreeSurface(surf);
 }
 
 SDL_Surface* app_sdl2_create_error_surf(void) {
@@ -158,6 +158,7 @@ bool app_sdl2_init(void) {
 	app_sdl2->cwd_buf[app_sdl2->cwd_base_size + 7] = '\0';
 	app_sdl2->cwd_base_size += 7;
 	app_sdl2->c_freq = (double)SDL_GetPerformanceFrequency();
+
 	return false;
 }
 

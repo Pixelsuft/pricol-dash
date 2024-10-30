@@ -5,6 +5,7 @@
 
 typedef struct {
 	Point size;
+	Rect real_src;
 	bool is_sub;
 } Tex;
 
@@ -14,6 +15,8 @@ typedef struct {
 	void (*on_resize)(void);
 	void (*destroy)(void);
 	void (*draw_scene)(void);
+	Tex* (*tex_from_surf)(void* surf);
+	void (*tex_destroy)(Tex* tex);
 	void (*fill_rect_s)(const Rect* rect, const Color* col);
 	Point size;
 	Point vs;

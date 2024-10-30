@@ -15,7 +15,7 @@ void ren_draw_scene(void) {}
 void ren_on_resize(void) {}
 
 void ren_fill_base(void) {
-	ren->t_sc = 2.0f;
+	ren->t_sc = 2.f; // TODO: configure texture quality
 	ren->destroy = ren_destroy;
 	ren->init = ren_init;
 	ren->quit = ren_quit;

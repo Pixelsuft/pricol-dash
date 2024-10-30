@@ -7,6 +7,33 @@
 
 RenSDL2* ren_sdl2;
 
+void ren_sdl2_tex_destroy(TexSDL2* tex) {
+	if (tex == NULL)
+		return;
+	if (tex->tex != NULL && !tex->parent.is_sub) {
+		SDL_DestroyTexture(tex->tex);
+		tex->tex = NULL;
+	}
+	m_free(tex);
+}
+
+TexSDL2* ren_sdl2_tex_from_surf(void* surf) {
+	// Assuming it's SDL_surface
+	TexSDL2* res = m_alloc(sizeof(TexSDL2));
+	SDL_Texture* tex = SDL_CreateTextureFromSurface(ren_sdl2->ren, (SDL_Surface*)surf);
+	if (tex == NULL) {
+		SLOG_ERROR("Failed to create SDL2 texture from surface (%s)", SDL_GetError());
+	}
+	res->tex = tex;
+	res->parent.is_sub = false;
+	res->parent.size.w = SDL_roundf((float)((SDL_Surface*)surf)->w / ren->t_sc);
+	res->parent.size.h = SDL_roundf((float)((SDL_Surface*)surf)->h / ren->t_sc);
+	res->parent.real_src.x = res->parent.real_src.y = 0.f;
+	res->parent.real_src.w = res->parent.size.w;
+	res->parent.real_src.h = res->parent.size.h;
+	return res;
+}
+
 void ren_sdl2_destroy(void) {
 	m_free(ren_sdl2);
 	ren = NULL;
@@ -73,6 +100,8 @@ bool ren_sdl2_create(void) {
 	ren->draw_scene = ren_sdl2_draw_scene;
 	ren->on_resize = ren_sdl2_on_resize;
 	ren->fill_rect_s = ren_sdl2_fill_rect_s;
+	FCAST(ren->tex_from_surf, ren_sdl2_tex_from_surf);
+	FCAST(ren->tex_destroy, ren_sdl2_tex_destroy);
 	return false;
 }
 #endif

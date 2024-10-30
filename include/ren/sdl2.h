@@ -5,6 +5,11 @@
 #include <ren/base.h>
 
 typedef struct {
+	Tex parent;
+	SDL_Texture* tex;
+} TexSDL2;
+
+typedef struct {
 	Ren p;
 	SDL_Renderer* ren;
 } RenSDL2;
