@@ -15,6 +15,8 @@
 
 // TODO: call from class App
 #define SINFO(...) SLOG_INFO(__VA_ARGS__)
+#define SWARN(...) SLOG_WARN(__VA_ARGS__)
+#define SERR(...) SLOG_ERROR(__VA_ARGS__)
 #define ATOI(str) SDL_atoi(str)
 #define ATOF(str) (float)SDL_atof(str)
 #define MEMSET(dst, c, len) SDL_memset(dst, c, len)

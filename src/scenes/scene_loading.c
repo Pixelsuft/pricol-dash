@@ -2,18 +2,22 @@
 #include <app/base.h>
 #include <app/sdl2.h>
 #include <ren/base.h>
+#include <fs.h>
 #include <minstd.h>
 #define base ((Scene*)this)
 
 void scene_loading_on_init(SceneLoading* this) {
+	fs_init();
 }
 
 void scene_loading_on_run(SceneLoading* this) {
+	fs_run();
 	app->clock_reset();
 }
 
 void scene_loading_on_update(SceneLoading* this) {
-	
+	if (fs->running)
+		fs_update_from_loop();
 }
 
 void scene_loading_on_draw(SceneLoading* this) {
