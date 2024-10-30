@@ -38,7 +38,22 @@ bool app_sdl2_init(void) {
 		app->cwd[1] = '/';
 		app->cwd[2] = '\0';
 	}
+	app_sdl2->c_freq = (double)SDL_GetPerformanceFrequency();
 	return false;
+}
+
+void app_sdl2_clock_reset(void) {
+	app_sdl2->c_last_tick = SDL_GetPerformanceCounter();
+}
+
+void app_sdl2_clock_update(void) {
+	Uint64 now = SDL_GetPerformanceCounter();
+	app->d_dt = (double)(now - app_sdl2->c_last_tick) / app_sdl2->c_freq;
+	dt = (float)app->d_dt;
+	app_sdl2->c_last_tick = now;
+	app->fps = (int)(1.0 / app->d_dt);
+	if (app->fps > (int)app_sdl2->c_freq)
+		app->fps = (int)app_sdl2->c_freq;
 }
 
 void app_sdl2_quit(void) {
@@ -178,6 +193,8 @@ bool app_sdl2_create(void) {
 	app->on_resize = app_sdl2_on_resize;
 	app->memory_alloc = app_sdl2_memory_alloc;
 	app->memory_free = app_sdl2_memory_free;
+	app->clock_reset = app_sdl2_clock_reset;
+	app->clock_update = app_sdl2_clock_update;
 	return false;
 }
 #endif

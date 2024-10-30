@@ -123,7 +123,7 @@ void scene_game_on_init(SceneGame* this) {
 }
 
 void scene_game_on_run(SceneGame* this) {
-
+	app->clock_reset();
 }
 
 void scene_game_on_update(SceneGame* this) {

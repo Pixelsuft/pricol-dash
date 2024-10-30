@@ -13,3 +13,4 @@ typedef struct Scene {
 
 void scene_fill_defaults(Scene* this);
 Scene* scene_game_create(void);
+Scene* scene_loading_create(void);

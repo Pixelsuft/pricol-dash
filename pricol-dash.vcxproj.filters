@@ -78,6 +78,9 @@
     <ClCompile Include="src\go\go_base.c">
       <Filter>Source Files\go</Filter>
     </ClCompile>
+    <ClCompile Include="src\scenes\scene_loading.c">
+      <Filter>Source Files\scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\platform.h">
@@ -118,6 +121,9 @@
     </ClInclude>
     <ClInclude Include="include\gen\res_map.h">
       <Filter>Header Files\gen</Filter>
+    </ClInclude>
+    <ClInclude Include="include\scenes\loading.h">
+      <Filter>Header Files\scenes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

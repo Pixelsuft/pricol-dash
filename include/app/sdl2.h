@@ -16,6 +16,8 @@
 
 typedef struct {
 	App p;
+	Uint64 c_last_tick;
+	double c_freq;
 	SDL_Event ev;
 	SDL_Window* win;
 } AppSDL2;

@@ -25,9 +25,9 @@ bool main_func(void) {
 #endif
     if (ren->init())
         goto ex3;
-    Scene* game_s = scene_game_create();
-    game_s->on_init(game_s);
-    app->run_scene(game_s);
+    Scene* start_scene = scene_loading_create();
+    start_scene->on_init(start_scene);
+    app->run_scene(start_scene);
     app->run();
     ret = false;
     goto ex4;

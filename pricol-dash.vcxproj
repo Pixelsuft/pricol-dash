@@ -157,6 +157,7 @@
     <ClCompile Include="src\ren\ren_sdl2.c" />
     <ClCompile Include="src\scenes\scene_base.c" />
     <ClCompile Include="src\scenes\scene_game.c" />
+    <ClCompile Include="src\scenes\scene_loading.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\api\sdl2.h" />
@@ -172,6 +173,7 @@
     <ClInclude Include="include\ren\sdl2.h" />
     <ClInclude Include="include\scenes\base.h" />
     <ClInclude Include="include\scenes\game.h" />
+    <ClInclude Include="include\scenes\loading.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

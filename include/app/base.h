@@ -23,6 +23,8 @@
 
 typedef struct Scene Scene;
 
+extern float dt;
+
 typedef struct {
 	bool (*init)(void);
 	void (*quit)(void);
@@ -33,6 +35,8 @@ typedef struct {
 	void (*stop)(void);
 	void (*on_resize)(void);
 	void (*poll_events)(void);
+	void (*clock_reset)(void);
+	void (*clock_update)(void);
 #if DEBUG
 	void* (*memory_alloc)(size_t size, const char* file_path, const char* func_name, size_t line);
 #else
@@ -41,9 +45,11 @@ typedef struct {
 	void (*memory_free)(void* ptr);
 	void (*run_scene)(Scene* scene);
 	Point size;
+	double d_dt;
 	Scene* sc;
 	char* cwd;
 	void* hwnd;
+	int fps;
 	bool running;
 } App;
 

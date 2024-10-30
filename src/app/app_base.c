@@ -4,6 +4,7 @@
 #include <scenes/base.h>
 
 App* app;
+float dt;
 
 bool app_init(void) {
 	return true;
@@ -16,6 +17,7 @@ void app_show_win(bool show) {
 }
 
 void app_on_update(void) {
+	app->clock_update();
 	if (app->sc != NULL)
 		app->sc->on_update(app->sc);
 }
@@ -69,5 +71,7 @@ void app_fill_base(void) {
 	app->stop = app_stop;
 	app->poll_events = app_dummy_void;
 	app->on_resize = app_dummy_void;
+	app->clock_reset = app_dummy_void;
+	app->clock_update = app_dummy_void;
 	app->run_scene = app_run_scene;
 }
