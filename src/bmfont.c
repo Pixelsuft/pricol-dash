@@ -12,22 +12,26 @@ void bmfont_destroy(BMFont* this) {
 }
 
 void bmfont_calc_line_size(BMFont* this, const char* text, size_t text_len, Point* size_buf) {
-	size_buf->x = 0.0f;
+	size_buf->x = 0.f;
 	size_buf->y = (float)this->line_height * this->sy;
 	int last_chr = 0;
+	BMChar* bm_char;
 	for (size_t i = 0; i < text_len; i++) {
 		size_t chr = (size_t)text[i];
 		if ((chr > this->chars.len) || ((this->chars.data[chr].w <= 0) && (this->chars.data[chr].xa < 0)))
 			continue;
-		size_buf->x += (float)this->chars.data[chr].xa;
+		bm_char = &this->chars.data[chr];
 		if (i > 0 && this->chars.data[chr].ks.data != NULL) {
-			for (size_t j = 0; j < this->chars.data[chr].ks.len; j += 2) {
-				if (this->chars.data[chr].ks.data[j] == last_chr) {
-					size_buf->x += (float)this->chars.data[chr].ks.data[i + 1];
-					break;
+			if (i > 0 && bm_char->ks.data != NULL) {
+				for (size_t j = 0; j < bm_char->ks.len; j += 2) {
+					if (bm_char->ks.data[j] == last_chr) {
+						//size_buf->x += (float)bm_char->ks.data[j + 1];
+						break;
+					}
 				}
 			}
 		}
+		size_buf->x += (float)this->chars.data[chr].xa;
 		last_chr = (int)chr;
 	}
 	size_buf->x *= this->sx;
@@ -65,6 +69,7 @@ void bmfont_ren_line_size(BMFont* this, const char* text, size_t text_len, const
 				for (size_t j = 0; j < bm_char->ks.len; j += 2) {
 					if (bm_char->ks.data[j] == last_chr) {
 						dst_rect.x += (float)bm_char->ks.data[j + 1] * this->sx / ren->t_sc;
+						cur_x += (float)bm_char->ks.data[j + 1] * this->sx / ren->t_sc;
 						break;
 					}
 				}
