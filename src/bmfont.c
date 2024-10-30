@@ -1,6 +1,8 @@
 #include <bmfont.h>
 #include <app/sdl2.h>
 
+// My ANSI-only impl for BMFont
+
 void bmfont_destroy(BMFont* this) {
 	for (size_t i = 0; i < this->chars.len; i++) {
 		if (this->chars.data[i].ks.data != NULL)
@@ -14,7 +16,7 @@ void bmfont_calc_line_size(BMFont* this, const char* text, size_t text_len, Poin
 	size_buf->y = (float)this->line_height * this->sy;
 	int last_chr = 0;
 	for (size_t i = 0; i < text_len; i++) {
-		size_t chr = (size_t)text[i]; // TODO: utf-8 support
+		size_t chr = (size_t)text[i];
 		if ((chr > this->chars.len) || ((this->chars.data[chr].w <= 0) && (this->chars.data[chr].xa < 0)))
 			continue;
 		size_buf->x += (float)this->chars.data[chr].xa;
@@ -30,6 +32,51 @@ void bmfont_calc_line_size(BMFont* this, const char* text, size_t text_len, Poin
 	}
 	size_buf->x *= this->sx;
 	size_buf->x /= ren->t_sc;
+}
+
+void bmfont_ren_line_size(BMFont* this, const char* text, size_t text_len, const Point* pos, const Point* size_buf) {
+	Point real_size;
+	if (size_buf == NULL) {
+		bmfont_calc_line_size(this, text, text_len, &real_size);
+	}
+	else {
+		real_size.w = size_buf->w;
+		real_size.h = size_buf->h;
+	}
+	float cur_x = pos->x - real_size.w / 2.f;
+	float cur_y = pos->y - real_size.h / 2.f;
+	BMChar* bm_char;
+	bool res = false;
+	Rect src_rect, dst_rect;
+	dst_rect.w = dst_rect.h = 0.0f;
+	int last_chr = 0;
+	for (size_t i = 0; i < text_len; i++) {
+		size_t chr = (size_t)text[i];
+		if ((chr > this->chars.len) || ((this->chars.data[chr].w <= 0) && (this->chars.data[chr].xa < 0)))
+			continue;
+		bm_char = &this->chars.data[chr];
+		if (bm_char->w > 0) {
+			src_rect.x = (float)bm_char->x;
+			src_rect.y = (float)bm_char->y;
+			src_rect.w = (float)bm_char->w;
+			src_rect.h = (float)bm_char->h;
+			dst_rect.x = cur_x + (float)bm_char->xo * this->sx / ren->t_sc;
+			if (i > 0 && bm_char->ks.data != NULL) {
+				for (size_t j = 0; j < bm_char->ks.len; j += 2) {
+					if (bm_char->ks.data[j] == last_chr) {
+						dst_rect.x += (float)bm_char->ks.data[j + 1] * this->sx / ren->t_sc;
+						break;
+					}
+				}
+			}
+			dst_rect.y = cur_y + (float)bm_char->yo * this->sy / ren->t_sc;
+			dst_rect.w = (float)bm_char->w * this->sx / ren->t_sc;
+			dst_rect.h = (float)bm_char->h * this->sy / ren->t_sc;
+			ren->copy_orig(this->page, &src_rect, &dst_rect);
+		}
+		cur_x += (float)bm_char->xa * this->sx / ren->t_sc;
+		last_chr = (int)chr;
+	}
 }
 
 void bmfont_init(BMFont* this, char* buf, size_t size) {

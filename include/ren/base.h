@@ -23,6 +23,7 @@ typedef struct {
 	void (*fill_rect_s)(const Rect* rect, const Color* col);
 	void (*copy)(Tex* tex, const Point* dst);
 	void (*copy_sc)(Tex* tex, const Point* dst, float sx, float sy);
+	void (*copy_orig)(Tex* tex, const Rect* src, const Rect* dst);
 	Point size;
 	Point vs;
 	Point offset;

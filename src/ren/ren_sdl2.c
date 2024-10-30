@@ -145,6 +145,11 @@ void ren_sdl2_copy_sc(TexSDL2* tex, const Point* dst, float sx, float sy) {
 	}
 }
 
+void ren_sdl2_copy_orig(TexSDL2* tex, const Rect* src, const Rect* dst) {
+	SDL_Rect src_rect = { (int)src->x, (int)src->y, (int)src->w, (int)src->h };
+	SDL_RenderCopyF(ren_sdl2->ren, tex->tex, &src_rect, (const SDL_FRect*)dst);
+}
+
 bool ren_sdl2_create(void) {
 	ren_sdl2 = m_alloc(sizeof(RenSDL2));
 	ren = (Ren*)ren_sdl2;
@@ -161,6 +166,7 @@ bool ren_sdl2_create(void) {
 	FCAST(ren->tex_dup, ren_sdl2_tex_dup);
 	FCAST(ren->copy, ren_sdl2_copy);
 	FCAST(ren->copy_sc, ren_sdl2_copy_sc);
+	FCAST(ren->copy_orig, ren_sdl2_copy_orig);
 	return false;
 }
 #endif

@@ -32,3 +32,4 @@ typedef struct {
 void bmfont_init(BMFont* this, char* buf, size_t size);
 void bmfont_destroy(BMFont* this);
 void bmfont_calc_line_size(BMFont* this, const char* text, size_t text_len, Point* size_buf);
+void bmfont_ren_line_size(BMFont* this, const char* text, size_t text_len, const Point* pos, const Point* size_buf);

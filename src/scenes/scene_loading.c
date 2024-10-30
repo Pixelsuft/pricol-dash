@@ -34,8 +34,7 @@ void scene_loading_on_draw(SceneLoading* this) {
 	if (logo)
 		ren->copy(logo, &POINT(ren->vs.w / 2.f, ren->vs.h / 2.f));
 	if (fnt->page) {
-		Point buf;
-		bmfont_calc_line_size(fnt, "test", 4, &buf);
+		bmfont_ren_line_size(fnt, "HELLO!", 6, &POINT(ren->vs.w / 2.f, ren->vs.h * 3.f / 4.f), NULL);
 		// SINFO("%fx%f", buf.x, buf.y);
 		// SINFO("draw text");
 	}
