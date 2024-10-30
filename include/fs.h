@@ -2,8 +2,10 @@
 #include <stdbool.h>
 #include <gen/res_map.h>
 #include <ren/base.h>
+#include <bmfont.h>
 
 typedef struct {
+	BMFont fnt[MAX_RES_FNT];
 	Tex* tex[MAX_RES_PNG];
 	void* temp_surf;
 	Tex* temp_tex;

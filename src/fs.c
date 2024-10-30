@@ -16,6 +16,10 @@
 	int temp_id = RES_PLIST(fn ".plist"); \
 	fs_load_sheet((ren->t_sc == 2.0f ? (fn "-hd.plist") : fn ".plist"), temp_id, RES_PNG(fn ".png")); \
 } while (0)
+#define LOAD_FNT(fn) do { \
+	int temp_id = RES_FNT(fn ".fnt"); \
+	fs_load_fnt((ren->t_sc == 2.0f ? (fn "-hd.fnt") : fn ".fnt"), temp_id, RES_PNG(fn ".png")); \
+} while (0)
 
 FileSystem* fs;
 
@@ -23,11 +27,12 @@ bool fs_create(void) {
 	fs = m_alloc(sizeof(FileSystem));
 	if (fs == NULL)
 		return true;
-	MEMSET(fs->tex, 0, sizeof(fs->tex));
 	return false;
 }
 
 bool fs_init(void) {
+	MEMSET(fs->tex, 0, sizeof(fs->tex));
+	MEMSET(fs->fnt, 0, sizeof(fs->fnt));
 	fs->temp_tex = NULL;
 	fs->temp_surf = NULL;
 	fs->progress = 0;
@@ -129,6 +134,17 @@ void fs_load_sheet(const char* fn, int id, int png_id) {
 			res->size.h = (float)rect_buf[3] / ren->t_sc;
 		}
 	}
+	fs->progress++;
+}
+
+void fs_load_fnt(const char* fn, int id, int png_id) {
+	size_t size;
+	char* buf = app->read_res_file(fn, &size);
+	if (buf == NULL)
+		return;
+	bmfont_init(&fs->fnt[id], buf, size, png_id);
+	m_free(buf);
+	fs->progress++;
 }
 
 int SDLCALL fs_thread_func(void* data) {
@@ -163,6 +179,7 @@ int SDLCALL fs_thread_func(void* data) {
 	LOAD_PNG("sliderthumbsel");
 	LOAD_PNG("smallDot");
 	LOAD_PNG("square01_001");
+	LOAD_FNT("goldFont");
 	SLOG_INFO("Loading ended!!");
 	fs->running = false;
 	return 0;
@@ -183,6 +200,11 @@ void fs_run(void) {
 }
 
 void fs_destroy(void) {
+	BMFont* fnt_ptr = fs->fnt;
+	while (fnt_ptr != (BMFont*)&fs->tex) {
+		bmfont_destroy(fnt_ptr);
+		fnt_ptr++;
+	}
 	Tex** tex_ptr = fs->tex;
 	while (tex_ptr != (Tex**)&fs->temp_surf) {
 		if (*tex_ptr)

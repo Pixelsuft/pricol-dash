@@ -25,11 +25,8 @@ typedef struct {
     Tex* page;
     size_t ch_count;
     size_t k_count;
-    int pad[4];
-    int spac[2];
-    int size;
     int line_height;
-    int base;
-    int scale_w;
-    int scale_h;
 } BMFont;
+
+void bmfont_init(BMFont* this, char* buf, size_t size, int png_id);
+void bmfont_destroy(BMFont* this);
