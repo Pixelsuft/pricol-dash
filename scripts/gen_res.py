@@ -34,7 +34,7 @@ for i in ld:
         if '.png</key>' in data:
             sheet_files.append(i)
             for j in data.replace('</key>', '<key>').split('<key>'):
-                if j.endswith('.png'):
+                if j.endswith('.png') and j not in png_files:
                     png_files.append(j)
         else:
             plist_files.append(i)

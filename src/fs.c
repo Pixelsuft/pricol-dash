@@ -1,15 +1,20 @@
 #include <fs.h>
 #include <app/base.h>
-// TODO: revert scale
+#include <xml.h>
+
 #define LOAD_PNGL(fn) do { \
 	fs->temp_no_scale = true; \
-	int temp_png_id = RES_PNG(fn ".png"); \
-	fs_load_texture(fn ".png", temp_png_id); \
+	int temp_id = RES_PNG(fn ".png"); \
+	fs_load_texture(fn ".png", temp_id); \
 } while (0)
 #define LOAD_PNG(fn) do { \
 	fs->temp_no_scale = false; \
-	int temp_png_id = RES_PNG(fn ".png"); \
-	fs_load_texture((ren->t_sc == 2.0f ? (fn "-hd.png") : fn ".png"), temp_png_id); \
+	int temp_id = RES_PNG(fn ".png"); \
+	fs_load_texture((ren->t_sc == 2.0f ? (fn "-hd.png") : fn ".png"), temp_id); \
+} while (0)
+#define LOAD_SHEET(fn) do { \
+	int temp_id = RES_PLIST(fn ".plist"); \
+	fs_load_sheet((ren->t_sc == 2.0f ? (fn "-hd.plist") : fn ".plist"), temp_id, RES_PNG(fn ".png")); \
 } while (0)
 
 FileSystem* fs;
@@ -47,6 +52,7 @@ void fs_load_texture(const char* fn, int id) {
 		fs->tex[id] = ren->tex_from_surf(fs->temp_surf, fs->temp_no_scale);
 		app->free_surf(fs->temp_surf);
 	}
+	fs->progress++;
 }
 
 void fs_update_from_loop(void) {
@@ -54,6 +60,70 @@ void fs_update_from_loop(void) {
 		return;
 	if (fs->temp_surf != NULL && fs->temp_tex == NULL) {
 		fs->temp_tex = ren->tex_from_surf(fs->temp_surf, fs->temp_no_scale);
+	}
+}
+
+void fs_load_sheet(const char* fn, int id, int png_id) {
+	size_t size;
+	char* buf = app->read_res_file(fn, &size);
+	if (buf == NULL)
+		return;
+	// Remove header (unsafe)
+	uint8_t* ptr = (uint8_t*)buf;
+	while (*ptr != '\n') {
+		ptr++;
+		size--;
+	}
+	ptr++;
+	size--;
+	while (*ptr != '\n') {
+		ptr++;
+		size--;
+	}
+	ptr++;
+	size--;
+	struct xml_document* document = xml_parse_document(ptr, size);
+	m_free(buf);
+	if (!document) {
+		SASSERT(0);
+		return;
+	}
+	Tex* src_tex = fs->tex[png_id];
+	struct xml_node* root = xml_document_root(document);
+	struct xml_node* root_node = xml_node_child(xml_node_child(root, 0), 1);
+	for (size_t i = 0; i < xml_node_children(root_node); i += 2) {
+		char xbuf[128];
+		struct xml_string* name_buf = xml_node_content(xml_node_child(root_node, i));
+		xml_string_copy(name_buf, xbuf, xml_string_length(name_buf));
+		xbuf[xml_string_length(name_buf)] = '\0';
+		Tex* res = ren->tex_dup(src_tex);
+		fs->tex[get_png_id(xbuf)] = res;
+		struct xml_node* data = xml_node_child(root_node, i + 1);
+		// Frame
+		name_buf = xml_node_content(xml_node_child(data, 1));
+		xml_string_copy(name_buf, xbuf, xml_string_length(name_buf));
+		xbuf[xml_string_length(name_buf)] = '\0';
+		SINFO("%s", xbuf);
+		// Offset
+		name_buf = xml_node_content(xml_node_child(data, 3));
+		xml_string_copy(name_buf, xbuf, xml_string_length(name_buf));
+		xbuf[xml_string_length(name_buf)] = '\0';
+		SINFO("%s", xbuf);
+		// Rotated
+		name_buf = xml_node_name(xml_node_child(data, 5));
+		xml_string_copy(name_buf, xbuf, xml_string_length(name_buf));
+		xbuf[xml_string_length(name_buf)] = '\0';
+		SINFO("%s", xbuf);
+		// Source Color
+		name_buf = xml_node_content(xml_node_child(data, 7));
+		xml_string_copy(name_buf, xbuf, xml_string_length(name_buf));
+		xbuf[xml_string_length(name_buf)] = '\0';
+		SINFO("%s", xbuf);
+		// Source Size
+		name_buf = xml_node_content(xml_node_child(data, 9));
+		xml_string_copy(name_buf, xbuf, xml_string_length(name_buf));
+		xbuf[xml_string_length(name_buf)] = '\0';
+		SINFO("%s", xbuf);
 	}
 }
 
@@ -86,6 +156,8 @@ int SDLCALL fs_thread_func(void* data) {
 	LOAD_PNG("sliderthumbsel");
 	LOAD_PNG("smallDot");
 	LOAD_PNG("square01_001");
+	LOAD_SHEET("GJ_LaunchSheet");
+	SLOG_INFO("Loading ended!!");
 	fs->running = false;
 	return 0;
 }

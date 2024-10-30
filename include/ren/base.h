@@ -6,7 +6,7 @@
 typedef struct {
 	Point size;
 	Rect real_src;
-	int real_flip;
+	float real_rot;
 	bool is_sub;
 } Tex;
 
@@ -18,6 +18,7 @@ typedef struct {
 	void (*draw_scene)(void);
 	Tex* (*tex_from_surf)(void* surf, bool no_scale);
 	void (*tex_destroy)(Tex* tex);
+	Tex* (*tex_dup)(Tex* tex);
 	void (*tex_col)(Tex* tex, const Color* col);
 	void (*fill_rect_s)(const Rect* rect, const Color* col);
 	void (*copy)(Tex* tex, const Point* dst);

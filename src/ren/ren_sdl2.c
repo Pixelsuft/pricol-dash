@@ -7,6 +7,20 @@
 
 RenSDL2* ren_sdl2;
 
+TexSDL2* ren_sdl2_tex_dup(TexSDL2* tex) {
+	TexSDL2* res = m_alloc(sizeof(TexSDL2));
+	res->tex = tex->tex;
+	res->parent.is_sub = true;
+	res->parent.size.w = tex->parent.size.w;
+	res->parent.size.h = tex->parent.size.h;
+	res->parent.real_src.x = tex->parent.real_src.x;
+	res->parent.real_src.y = tex->parent.real_src.y;
+	res->parent.real_src.w = tex->parent.real_src.w;
+	res->parent.real_src.h = tex->parent.real_src.h;
+	res->parent.real_rot = tex->parent.real_rot;
+	return res;
+}
+
 void ren_sdl2_tex_destroy(TexSDL2* tex) {
 	if (tex == NULL)
 		return;
@@ -37,7 +51,7 @@ TexSDL2* ren_sdl2_tex_from_surf(void* surf, bool no_scale) {
 	res->parent.real_src.x = res->parent.real_src.y = 0.f;
 	res->parent.real_src.w = (float)((SDL_Surface*)surf)->w;
 	res->parent.real_src.h = (float)((SDL_Surface*)surf)->h;
-	res->parent.real_flip = 0;
+	res->parent.real_rot = 0.f;
 	return res;
 }
 
@@ -106,7 +120,7 @@ void ren_sdl2_copy(TexSDL2* tex, const Point* dst) {
 	if (tex->parent.is_sub) {
 		SDL_FRect dst_rect = { dst->x - tex->parent.size.w / 2.0f, dst->y - tex->parent.size.h / 2.0f, tex->parent.size.w, tex->parent.size.h };
 		SDL_Rect src_rect = { (int)tex->parent.real_src.x, (int)tex->parent.real_src.y, (int)tex->parent.real_src.w, (int)tex->parent.real_src.h };
-		SDL_RenderCopyExF(ren_sdl2->ren, tex->tex, &src_rect, &dst_rect, 0.0, NULL, (SDL_RendererFlip)tex->parent.real_flip);
+		SDL_RenderCopyExF(ren_sdl2->ren, tex->tex, &src_rect, &dst_rect, (double)tex->parent.real_rot, NULL, SDL_FLIP_NONE);
 	}
 	else {
 		SDL_FRect dst_rect = { dst->x - tex->parent.size.w / 2.0f, dst->y - tex->parent.size.h / 2.0f, tex->parent.size.w, tex->parent.size.h };
@@ -121,7 +135,7 @@ void ren_sdl2_copy_sc(TexSDL2* tex, const Point* dst, float sx, float sy) {
 			tex->parent.size.w * sx, tex->parent.size.h * sy
 		};
 		SDL_Rect src_rect = { (int)tex->parent.real_src.x, (int)tex->parent.real_src.y, (int)tex->parent.real_src.w, (int)tex->parent.real_src.h };
-		SDL_RenderCopyExF(ren_sdl2->ren, tex->tex, &src_rect, &dst_rect, 0.0, NULL, (SDL_RendererFlip)tex->parent.real_flip);
+		SDL_RenderCopyExF(ren_sdl2->ren, tex->tex, &src_rect, &dst_rect, (double)tex->parent.real_rot, NULL, SDL_FLIP_NONE);
 	}
 	else {
 		SDL_FRect dst_rect = {
@@ -145,6 +159,7 @@ bool ren_sdl2_create(void) {
 	FCAST(ren->tex_from_surf, ren_sdl2_tex_from_surf);
 	FCAST(ren->tex_destroy, ren_sdl2_tex_destroy);
 	FCAST(ren->tex_col, ren_sdl2_tex_col);
+	FCAST(ren->tex_dup, ren_sdl2_tex_dup);
 	FCAST(ren->copy, ren_sdl2_copy);
 	FCAST(ren->copy_sc, ren_sdl2_copy_sc);
 	return false;

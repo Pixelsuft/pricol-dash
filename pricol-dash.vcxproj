@@ -159,6 +159,7 @@
     <ClCompile Include="src\scenes\scene_base.c" />
     <ClCompile Include="src\scenes\scene_game.c" />
     <ClCompile Include="src\scenes\scene_loading.c" />
+    <ClCompile Include="src\xml.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\api\sdl2.h" />

@@ -7,6 +7,8 @@ Release
 lib
 pricol-dash
 assets
+xml.c
+xml.h
 *.exe
 *.dll
 *.rar
