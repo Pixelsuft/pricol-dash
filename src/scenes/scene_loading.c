@@ -18,6 +18,11 @@ void scene_loading_on_run(SceneLoading* this) {
 void scene_loading_on_update(SceneLoading* this) {
 	if (fs->running)
 		fs_update_from_loop();
+	else if (1) {
+		Scene* sc = scene_game_create();
+		sc->on_init(sc);
+		app->run_scene(sc);
+	}
 }
 
 void scene_loading_on_draw(SceneLoading* this) {

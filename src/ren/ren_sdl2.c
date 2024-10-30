@@ -83,7 +83,7 @@ void ren_sdl2_draw_scene(void) {
 }
 
 void ren_sdl2_fill_rect_s(const Rect* rect, const Color* col) {
-	SDL_FRect dst = { rect->x + ren->offset.x + rect->w / 2.0f, rect->y + ren->offset.y + rect->h / 2.0f, rect->w, rect->h };
+	SDL_FRect dst = { rect->x + ren->offset.x - rect->w / 2.0f, rect->y + ren->offset.y - rect->h / 2.0f, rect->w, rect->h };
 	SDL_SetRenderDrawBlendMode(ren_sdl2->ren, col->r >= 255.0f ? SDL_BLENDMODE_NONE : SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(ren_sdl2->ren, (Uint8)col->r, (Uint8)col->g, (Uint8)col->b, (Uint8)col->a);
 	SDL_RenderFillRectF(ren_sdl2->ren, &dst);
@@ -118,14 +118,14 @@ void ren_sdl2_tex_col(TexSDL2* tex, const Color* col) {
 // TODO: transparency
 void ren_sdl2_copy(TexSDL2* tex, const Point* dst) {
 	if (tex->parent.is_sub) {
-		SDL_FRect dst_rect = { dst->x - tex->parent.size.w / 2.0f, dst->y - tex->parent.size.h / 2.0f, tex->parent.size.w, tex->parent.size.h };
+		SDL_FRect dst_rect = { dst->x + ren->offset.x - tex->parent.size.w / 2.0f, dst->y + ren->offset.y - tex->parent.size.h / 2.0f, tex->parent.size.w, tex->parent.size.h };
 		// SINFO("%f %f %f %f", tex->parent.real_src.w, tex->parent.real_src.h, dst_rect.w, dst_rect.h);
-		SDL_Rect src_rect = { (int)tex->parent.real_src.x, (int)tex->parent.real_src.y, (int)tex->parent.real_src.w, (int)tex->parent.real_src.h };
+		SDL_Rect src_rect = {(int)tex->parent.real_src.x, (int)tex->parent.real_src.y, (int)tex->parent.real_src.w, (int)tex->parent.real_src.h };
 		SDL_FPoint origin = { 0.0f, 0.0f };
 		SDL_RenderCopyExF(ren_sdl2->ren, tex->tex, &src_rect, &dst_rect, (double)tex->parent.real_rot, NULL, SDL_FLIP_NONE);
 	}
 	else {
-		SDL_FRect dst_rect = { dst->x - tex->parent.size.w / 2.0f, dst->y - tex->parent.size.h / 2.0f, tex->parent.size.w, tex->parent.size.h };
+		SDL_FRect dst_rect = { dst->x + ren->offset.x - tex->parent.size.w / 2.0f, dst->y + ren->offset.y - tex->parent.size.h / 2.0f, tex->parent.size.w, tex->parent.size.h };
 		SDL_RenderCopyF(ren_sdl2->ren, tex->tex, NULL, &dst_rect);
 	}
 }
@@ -133,7 +133,7 @@ void ren_sdl2_copy(TexSDL2* tex, const Point* dst) {
 void ren_sdl2_copy_sc(TexSDL2* tex, const Point* dst, float sx, float sy) {
 	if (tex->parent.is_sub) {
 		SDL_FRect dst_rect = {
-			dst->x - tex->parent.size.w * sx / 2.0f, dst->y - tex->parent.size.h * sy / 2.0f,
+			dst->x + ren->offset.x - tex->parent.size.w * sx / 2.0f, dst->y + ren->offset.y - tex->parent.size.h * sy / 2.0f,
 			tex->parent.size.w * sx, tex->parent.size.h * sy
 		};
 		SDL_Rect src_rect = { (int)tex->parent.real_src.x, (int)tex->parent.real_src.y, (int)tex->parent.real_src.w, (int)tex->parent.real_src.h };
@@ -141,7 +141,7 @@ void ren_sdl2_copy_sc(TexSDL2* tex, const Point* dst, float sx, float sy) {
 	}
 	else {
 		SDL_FRect dst_rect = {
-			dst->x - tex->parent.size.w * sx / 2.0f, dst->y - tex->parent.size.h * sy / 2.0f,
+			dst->x + ren->offset.x - tex->parent.size.w * sx / 2.0f, dst->y + ren->offset.y - tex->parent.size.h * sy / 2.0f,
 			tex->parent.size.w * sx, tex->parent.size.h * sy
 		};
 		SDL_RenderCopyF(ren_sdl2->ren, tex->tex, NULL, &dst_rect);
@@ -150,7 +150,11 @@ void ren_sdl2_copy_sc(TexSDL2* tex, const Point* dst, float sx, float sy) {
 
 void ren_sdl2_copy_orig(TexSDL2* tex, const Rect* src, const Rect* dst) {
 	SDL_Rect src_rect = { (int)src->x, (int)src->y, (int)src->w, (int)src->h };
-	SDL_RenderCopyF(ren_sdl2->ren, tex->tex, &src_rect, (const SDL_FRect*)dst);
+	SDL_FRect dst_rect = {
+		dst->x + ren->offset.x, dst->y + ren->offset.y,
+		dst->w, dst->h
+	};
+	SDL_RenderCopyF(ren_sdl2->ren, tex->tex, &src_rect, &dst_rect);
 }
 
 bool ren_sdl2_create(void) {

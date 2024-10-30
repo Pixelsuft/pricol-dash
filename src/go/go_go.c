@@ -1,9 +1,10 @@
 #include <go/go.h>
 #include <ren/base.h>
+#include <fs.h>
 #define base ((GObject*)this)
 
 void gblock_on_draw(GBlock* this) {
-	ren->fill_rect_s(&RECT(base->pos.x, base->pos.y, 30, 30), &RGBA(255, 0, 0, 100));
+	ren->copy(fs->tex[RES_PNG("square_01_001.png")], &base->pos);
 }
 
 void gblock_init(GBlock* this) {
