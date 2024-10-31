@@ -1,7 +1,8 @@
 #pragma once
 #include <scenes/base.h>
 #include <array.h>
-#include <go/base.h>
+
+typedef struct GObject GObject;
 
 typedef struct {
 	Scene parent;

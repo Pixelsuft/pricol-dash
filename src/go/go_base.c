@@ -1,6 +1,6 @@
 #include <go/base.h>
 
-void go_dummy_func(GObject* this) {}
+void go_dummy_func(GObject* this, SceneGame* game) {}
 
 void go_fill_base(GObject* this) {
 	this->on_init = go_dummy_func;

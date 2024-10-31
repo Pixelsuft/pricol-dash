@@ -3,7 +3,7 @@
 #include <fs.h>
 #define base ((GObject*)this)
 
-void gblock_on_draw(GBlock* this) {
+void gblock_on_draw(GBlock* this, SceneGame* game) {
 	if (ren->glow && this->glow) {
 		float ox = base->pos.x;
 		float oy = base->pos.y;
@@ -16,7 +16,7 @@ void gblock_on_draw(GBlock* this) {
 	ren->copy_rot(this->tex, &base->pos, base->rot, base->flip);
 }
 
-void gblock_on_init(GBlock* this) {
+void gblock_on_init(GBlock* this, SceneGame* game) {
 	this->glow = NULL;
 	if (base->id == 1) {
 		this->tex = fs->tex[RES_PNG("square_01_001.png")];
@@ -56,7 +56,7 @@ void gblock_create(GBlock* this) {
 	FCAST(base->on_draw, gblock_on_draw);
 }
 
-void gspike_on_draw(GSpike* this) {
+void gspike_on_draw(GSpike* this, SceneGame* game) {
 	if (ren->glow) {
 		base->pos.y += .5f;
 		ren->copy_rot(this->glow, &base->pos, base->rot, base->flip);
@@ -65,7 +65,7 @@ void gspike_on_draw(GSpike* this) {
 	ren->copy_rot(this->tex, &base->pos, base->rot, base->flip);
 }
 
-void gspike_on_init(GSpike* this) {
+void gspike_on_init(GSpike* this, SceneGame* game) {
 	this->glow = NULL;
 	if (base->id == 8) {
 		this->tex = fs->tex[RES_PNG("spike_01_001.png")];

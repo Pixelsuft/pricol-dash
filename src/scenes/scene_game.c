@@ -3,6 +3,7 @@
 #include <app/sdl2.h>
 #include <ren/base.h>
 #include <go/base.h>
+#include <go/base.h>
 #include <go/go.h>
 #include <fs.h>
 #include <minstd.h>
@@ -13,8 +14,11 @@
 void scene_game_on_init(SceneGame* this) {
 	this->def_bg_col.a = this->def_gr_col.a = 255.0f;
 	array_init(&this->obj, 0, sizeof(GObject*), sizeof(GObject*) * 128);
-	char* lv_str = fs->lv_data[7]; // TODO: dup str
+	char* lv_str = fs->lv_data[0];
 	char* iter = (char*)lv_str;
+	char* prev_ch;
+	char* prev_ch2;
+	char pch, pch2;
 	bool still_should_read = true;
 	int audio_id = 0;
 	while (still_should_read) {
@@ -23,6 +27,8 @@ void scene_game_on_init(SceneGame* this) {
 			iter++;
 		if (!(*iter))
 			break;
+		prev_ch = iter;
+		pch = *iter;
 		*iter = '\0';
 		iter++;
 		char* val_str = iter;
@@ -31,6 +37,8 @@ void scene_game_on_init(SceneGame* this) {
 		if (!(*iter))
 			break;
 		still_should_read = *iter == ',';
+		prev_ch2 = iter;
+		pch2 = *iter;
 		*iter = '\0';
 		iter++;
 		if (id_str[0] == 'k') {
@@ -71,6 +79,8 @@ void scene_game_on_init(SceneGame* this) {
 					audio_id = ATOI(val_str);
 			}
 		}
+		*prev_ch = pch;
+		*prev_ch2 = pch2;
 	}
 	while (*iter) {
 		still_should_read = true;
@@ -81,6 +91,8 @@ void scene_game_on_init(SceneGame* this) {
 				iter++;
 			if (!(*iter))
 				break;
+			prev_ch = iter;
+			pch = *iter;
 			*iter = '\0';
 			iter++;
 			char* val_str = iter;
@@ -89,6 +101,8 @@ void scene_game_on_init(SceneGame* this) {
 			if (!(*iter))
 				break;
 			still_should_read = *iter == ',';
+			prev_ch2 = iter;
+			pch2 = *iter;
 			*iter = '\0';
 			iter++;
 			if (*id_str && !id_str[1] && (obj || id_str[0] == '1')) {
@@ -145,9 +159,11 @@ void scene_game_on_init(SceneGame* this) {
 			else if (*id_str && obj) {
 				// Properties 10 - 99
 			}
+			*prev_ch = pch;
+			*prev_ch2 = pch2;
 		}
 		if (obj) {
-			obj->on_init(obj);
+			obj->on_init(obj, this);
 			array_push(&this->obj, sizeof(GObject*), &obj);
 		}
 	}
@@ -162,7 +178,7 @@ void scene_game_on_update(SceneGame* this) {
 	this->cam_pos.x = -ren->offset.x;
 	this->cam_pos.y = -ren->offset.y;
 	for (GObject** obj = this->obj.data; obj != ARRAY_END(&this->obj); obj++) {
-		(*obj)->on_update(*obj);
+		(*obj)->on_update(*obj, this);
 	}
 }
 
@@ -176,7 +192,7 @@ void scene_game_on_draw(SceneGame* this) {
 			continue;
 		else if ((*obj)->pos.x - 50.f > this->cam_pos.x + ren->vs.w)
 			continue;
-		(*obj)->on_draw(*obj);
+		(*obj)->on_draw(*obj, this);
 	}
 }
 
