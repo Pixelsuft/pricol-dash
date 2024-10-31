@@ -14,6 +14,7 @@ typedef struct Player {
 	Tex* tex2;
 	b2BodyId body;
 	b2ShapeId shape;
+	bool holding_jump_key;
 } Player;
 
 void player_create(Player* this);
