@@ -31,6 +31,7 @@ typedef struct {
 	Point offset;
 	float scale;
 	float t_sc;
+	bool glow;
 } Ren;
 
 extern Ren* ren;

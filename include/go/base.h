@@ -3,6 +3,7 @@
 
 typedef struct GObject {
 	Point pos;
+	Point size;
 	void (*on_init)(struct GObject* this);
 	void (*on_update)(struct GObject* this);
 	void (*on_draw)(struct GObject* this);

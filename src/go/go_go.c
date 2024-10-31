@@ -8,6 +8,7 @@ void gblock_on_draw(GBlock* this) {
 }
 
 void gblock_on_init(GBlock* this) {
+	base->size.w = base->size.h = 30.f;
 	if (base->id == 1)
 		this->tex = fs->tex[RES_PNG("square_01_001.png")];
 	else if (base->id == 2)
@@ -37,6 +38,7 @@ void gspike_on_draw(GSpike* this) {
 }
 
 void gspike_on_init(GSpike* this) {
+	base->size.w = base->size.h = 30.f;
 	this->tex = fs->tex[RES_PNG("spike_01_001.png")];
 }
 

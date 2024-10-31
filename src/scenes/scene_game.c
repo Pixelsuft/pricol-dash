@@ -153,9 +153,12 @@ void scene_game_on_init(SceneGame* this) {
 
 void scene_game_on_run(SceneGame* this) {
 	app->clock_reset();
+	this->cam_pos.x = this->cam_pos.y = 0.f;
 }
 
 void scene_game_on_update(SceneGame* this) {
+	this->cam_pos.x = -ren->offset.x;
+	this->cam_pos.y = -ren->offset.y;
 	for (GObject** obj = this->obj.data; obj != ARRAY_END(&this->obj); obj++) {
 		(*obj)->on_update(*obj);
 	}
@@ -167,6 +170,10 @@ void scene_game_on_draw(SceneGame* this) {
 	ren->fill_rect_s(&RECT(100, 100, 30, 30), &this->def_bg_col);
 	ren->fill_rect_s(&RECT(100, 200, 30, 30), &this->def_gr_col);
 	for (GObject** obj = this->obj.data; obj != ARRAY_END(&this->obj); obj++) {
+		if ((*obj)->pos.x + (*obj)->size.w < this->cam_pos.x)
+			continue;
+		else if ((*obj)->pos.x - (*obj)->size.w > this->cam_pos.x + ren->vs.w)
+			continue;
 		(*obj)->on_draw(*obj);
 	}
 }
