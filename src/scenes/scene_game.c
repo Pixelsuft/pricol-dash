@@ -15,7 +15,7 @@
 void scene_game_on_init(SceneGame* this) {
 	this->def_bg_col.a = this->def_gr_col.a = 255.0f;
 	array_init(&this->obj, 0, sizeof(GObject*), sizeof(GObject*) * 128);
-	char* lv_str = fs->lv_data[0];
+	char* lv_str = fs->lv_data[0]; // TODO: level selection
 	b2WorldDef world_def = b2DefaultWorldDef();
 	world_def.gravity.y = 9.81f * 120.f;
 	this->world = b2CreateWorld(&world_def);
