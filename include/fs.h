@@ -3,10 +3,12 @@
 #include <gen/res_map.h>
 #include <ren/base.h>
 #include <bmfont.h>
+#define MAX_LEVELS 7
 
 typedef struct {
 	BMFont fnt[MAX_RES_FNT];
 	Tex* tex[MAX_RES_PNG];
+	char* lv_data[MAX_LEVELS];
 	void* temp_surf;
 	Tex* temp_tex;
 	void* thread_h;

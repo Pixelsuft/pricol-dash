@@ -36,7 +36,7 @@ bool fs_init(void) {
 	fs->temp_tex = NULL;
 	fs->temp_surf = NULL;
 	fs->progress = 0;
-	fs->total_count = MAX_RES_PNG + MAX_RES_MP3 + MAX_RES_OGG + MAX_RES_FNT + MAX_RES_SHEET + MAX_RES_PLIST;
+	fs->total_count = MAX_RES_PNG + MAX_RES_MP3 + MAX_RES_OGG + MAX_RES_FNT + MAX_RES_SHEET + MAX_RES_PLIST + 1;
 	fs->threaded = false;
 	fs->running = false;
 	return false;
@@ -149,6 +149,22 @@ void fs_load_fnt(const char* fn, int id, int png_id) {
 	fs->progress++;
 }
 
+void fs_load_levels(const char* fn) {
+	size_t size;
+	char* buf = app->read_res_file(fn, &size);
+	if (buf == NULL)
+		return;
+	char* iter = buf;
+	for (size_t i = 0; i < 7; i++) {
+		fs->lv_data[i] = iter;
+		while (*iter != '\n')
+			iter++;
+		*iter = '\0';
+		iter++;
+	}
+	fs->progress++;
+}
+
 int SDLCALL fs_thread_func(void* data) {
 	UNUSED1(data);
 	// First of all, loading screen
@@ -185,6 +201,7 @@ int SDLCALL fs_thread_func(void* data) {
 	LOAD_PNG("square01_001");
 	LOAD_SHEET("GJ_GameSheet");
 	SLOG_INFO("Loading ended!!");
+	fs_load_levels("full_lv.txt");
 	fs->running = false;
 	return 0;
 }
@@ -204,13 +221,14 @@ void fs_run(void) {
 }
 
 void fs_destroy(void) {
+	m_free(fs->lv_data);
 	BMFont* fnt_ptr = fs->fnt;
 	while (fnt_ptr != (BMFont*)&fs->tex) {
 		bmfont_destroy(fnt_ptr);
 		fnt_ptr++;
 	}
 	Tex** tex_ptr = fs->tex;
-	while (tex_ptr != (Tex**)&fs->temp_surf) {
+	while (tex_ptr != (Tex**)&fs->lv_data) {
 		if (*tex_ptr)
 			ren->tex_destroy(*tex_ptr);
 		tex_ptr++;
