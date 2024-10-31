@@ -95,12 +95,22 @@ void scene_game_on_init(SceneGame* this) {
 				switch (id_str[0]) {
 				case '1': {
 					switch (ATOI(val_str)) {
-					case 1: {
+					case 1:
+					case 2:
+					case 3:
+					case 4:
+					case 5:
+					case 6:
+					case 7: {
 						obj = f_alloc(sizeof(GBlock));
+						// TODO: create func instead of init
+						obj->id = ATOI(val_str);
 						gblock_init((GBlock*)obj);
 						break;
 					}
 					}
+					if (obj)
+						obj->id = ATOI(val_str);
 					break;
 				}
 				case '2': {
@@ -130,7 +140,8 @@ void scene_game_on_update(SceneGame* this) {
 }
 
 void scene_game_on_draw(SceneGame* this) {
-	ren->fill_rect_s(&RECT(0, 500, 100000, 5), &this->def_bg_col);
+	ren->clear(&this->def_bg_col);
+	ren->fill_rect_s(&RECT(0, 500, 100000, 5), &this->def_gr_col);
 	ren->fill_rect_s(&RECT(100, 100, 30, 30), &this->def_bg_col);
 	ren->fill_rect_s(&RECT(100, 200, 30, 30), &this->def_gr_col);
 	for (GObject** obj = this->obj.data; obj != ARRAY_END(&this->obj); obj++) {

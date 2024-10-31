@@ -75,8 +75,8 @@ void ren_sdl2_quit(void) {
 }
 
 void ren_sdl2_draw_scene(void) {
-	SDL_SetRenderDrawColor(ren_sdl2->ren, 0, 0, 0, 255);
-	SDL_RenderClear(ren_sdl2->ren);
+	// SDL_SetRenderDrawColor(ren_sdl2->ren, 0, 0, 0, 255);
+	// SDL_RenderClear(ren_sdl2->ren);
 	if (app->sc != NULL)
 		app->sc->on_draw(app->sc);
 	SDL_RenderPresent(ren_sdl2->ren);
@@ -157,6 +157,11 @@ void ren_sdl2_copy_orig(TexSDL2* tex, const Rect* src, const Rect* dst) {
 	SDL_RenderCopyF(ren_sdl2->ren, tex->tex, &src_rect, &dst_rect);
 }
 
+void ren_sdl2_clear(const Color* col) {
+	SDL_SetRenderDrawColor(ren_sdl2->ren, (Uint8)col->r, (Uint8)col->g, (Uint8)col->b, (Uint8)col->a);
+	SDL_RenderClear(ren_sdl2->ren);
+}
+
 bool ren_sdl2_create(void) {
 	ren_sdl2 = m_alloc(sizeof(RenSDL2));
 	ren = (Ren*)ren_sdl2;
@@ -164,6 +169,7 @@ bool ren_sdl2_create(void) {
 	ren->destroy = ren_sdl2_destroy;
 	ren->init = ren_sdl2_init;
 	ren->quit = ren_sdl2_quit;
+	ren->clear = ren_sdl2_clear;
 	ren->draw_scene = ren_sdl2_draw_scene;
 	ren->on_resize = ren_sdl2_on_resize;
 	ren->fill_rect_s = ren_sdl2_fill_rect_s;

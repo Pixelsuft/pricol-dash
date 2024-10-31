@@ -20,6 +20,7 @@ typedef struct {
 	void (*tex_destroy)(Tex* tex);
 	Tex* (*tex_dup)(Tex* tex);
 	void (*tex_col)(Tex* tex, const Color* col);
+	void (*clear)(const Color* col);
 	void (*fill_rect_s)(const Rect* rect, const Color* col);
 	void (*copy)(Tex* tex, const Point* dst);
 	void (*copy_sc)(Tex* tex, const Point* dst, float sx, float sy);

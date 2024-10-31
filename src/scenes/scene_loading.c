@@ -30,6 +30,7 @@ void scene_loading_on_draw(SceneLoading* this) {
 	Tex* rob_tex = fs->tex[RES_PNG("RobTopLogoBig_001.png")];
 	Tex* logo = fs->tex[RES_PNG("GJ_logo_001.png")];
 	BMFont* fnt = &fs->fnt[RES_FNT("goldFont.fnt")];
+	ren->clear(&RGBA(0, 0, 255, 255));
 	if (bg_tex) {
 		ren->tex_col(bg_tex, &RGBA(40, 62, 255, 255));
 		ren->copy_sc(bg_tex, &POINT(ren->vs.w / 2.0f, ren->vs.h / 2.0f), 1.3f, 1.3f);
