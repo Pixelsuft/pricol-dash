@@ -17,7 +17,6 @@ void gblock_on_draw(GBlock* this) {
 }
 
 void gblock_on_init(GBlock* this) {
-	base->size.w = base->size.h = 30.f;
 	this->glow = NULL;
 	if (base->id == 1) {
 		this->tex = fs->tex[RES_PNG("square_01_001.png")];
@@ -48,7 +47,6 @@ void gblock_on_init(GBlock* this) {
 	}
 	else if (base->id == 40) {
 		this->tex = fs->tex[RES_PNG("plank_01_001.png")];
-		base->size.h = 14.f;
 	}
 }
 
@@ -68,9 +66,14 @@ void gspike_on_draw(GSpike* this) {
 }
 
 void gspike_on_init(GSpike* this) {
-	base->size.w = base->size.h = 30.f;
-	this->tex = fs->tex[RES_PNG("spike_01_001.png")];
-	this->glow = fs->tex[RES_PNG("spike_01_glow_001.png")];
+	this->glow = NULL;
+	if (base->id == 8) {
+		this->tex = fs->tex[RES_PNG("spike_01_001.png")];
+		this->glow = fs->tex[RES_PNG("spike_01_glow_001.png")];
+	}
+	else if (base->id == 39) {
+		this->tex = fs->tex[RES_PNG("spike_02_001.png")];
+	}
 }
 
 void gspike_create(GSpike* this) {

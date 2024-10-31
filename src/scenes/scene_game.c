@@ -109,7 +109,8 @@ void scene_game_on_init(SceneGame* this) {
 						gblock_create((GBlock*)obj);
 						break;
 					}
-					case 8: {
+					case 8:
+					case 39: {
 						obj = f_alloc(sizeof(GSpike));
 						gspike_create((GSpike*)obj);
 						break;
@@ -171,9 +172,9 @@ void scene_game_on_draw(SceneGame* this) {
 	ren->fill_rect_s(&RECT(100, 100, 30, 30), &this->def_bg_col);
 	ren->fill_rect_s(&RECT(100, 200, 30, 30), &this->def_gr_col);
 	for (GObject** obj = this->obj.data; obj != ARRAY_END(&this->obj); obj++) {
-		if ((*obj)->pos.x + (*obj)->size.w < this->cam_pos.x)
+		if ((*obj)->pos.x + 50.f < this->cam_pos.x)
 			continue;
-		else if ((*obj)->pos.x - (*obj)->size.w > this->cam_pos.x + ren->vs.w)
+		else if ((*obj)->pos.x - 50.f > this->cam_pos.x + ren->vs.w)
 			continue;
 		(*obj)->on_draw(*obj);
 	}
