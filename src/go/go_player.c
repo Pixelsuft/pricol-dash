@@ -31,7 +31,7 @@ void go_player_run(Player* this, SceneGame* game) {
 
 void go_player_update(Player* this, SceneGame* game) {
 	if (this->holding_jump_key) {
-		b2Body_ApplyLinearImpulseToCenter(this->body, (b2Vec2) { .x = 0.f, .y = b2Body_GetMass(this->body) * -4000.f}, false);
+		b2Body_ApplyForceToCenter(this->body, (b2Vec2) { .x = 0.f, .y = b2Body_GetMass(this->body) * -40000.f}, false);
 	}
 	b2Vec2 vel = b2Body_GetLinearVelocity(this->body);
 	vel.x = 10.4f * 30.f;

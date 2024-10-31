@@ -6,6 +6,8 @@ typedef struct {
 	GObject parent;
 	Tex* tex;
 	Tex* glow;
+	b2BodyId body;
+	b2ShapeId shape;
 } GBlock;
 
 void gblock_create(GBlock* this);

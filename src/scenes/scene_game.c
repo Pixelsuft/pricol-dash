@@ -17,7 +17,7 @@ void scene_game_on_init(SceneGame* this) {
 	array_init(&this->obj, 0, sizeof(GObject*), sizeof(GObject*) * 128);
 	char* lv_str = fs->lv_data[0];
 	b2WorldDef world_def = b2DefaultWorldDef();
-	world_def.gravity.y = 9.81f * 100.f;
+	world_def.gravity.y = 9.81f * 120.f;
 	this->world = b2CreateWorld(&world_def);
 	// Parsing begins
 	char* iter = (char*)lv_str;
@@ -172,6 +172,18 @@ void scene_game_on_init(SceneGame* this) {
 			array_push(&this->obj, sizeof(GObject*), &obj);
 		}
 	}
+
+	{
+		// Ground hack
+		GBlock* ground = f_alloc(sizeof(GBlock));
+		gblock_create(ground);
+		ground->parent.id = -1;
+		ground->parent.pos.y = 600.0f;
+		ground->parent.pos.x = 1000.0f;
+		ground->parent.on_init(&ground->parent, this);
+		array_push(&this->obj, sizeof(GObject*), &ground);
+	}
+
 	this->pl = f_alloc(sizeof(Player));
 	player_create(this->pl);
 	this->pl->on_init(this->pl, this);
@@ -184,7 +196,6 @@ void scene_game_on_run(SceneGame* this) {
 	this->pl->on_run(this->pl, this);
 }
 
-static was_shit = false;
 void scene_game_on_update(SceneGame* this) {
 	this->cam_pos.x += 10.4f * 30.f * dt;
 	ren->offset.x = -this->cam_pos.x;
@@ -194,13 +205,10 @@ void scene_game_on_update(SceneGame* this) {
 		(*obj)->on_update(*obj, this);
 	}
 	if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON_LMASK) {
-		if (!was_shit) {
-			was_shit = true;
-			this->pl->holding_jump_key = true;
-		}
+		this->pl->holding_jump_key = true;
 	}
 	else
-		was_shit = false;
+		this->pl->holding_jump_key = false;
 	this->pl->on_update(this->pl, this);
 	this->pl->holding_jump_key = false;
 }

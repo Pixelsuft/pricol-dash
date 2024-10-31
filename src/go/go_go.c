@@ -13,7 +13,8 @@ void gblock_on_draw(GBlock* this, SceneGame* game) {
 		base->pos.x = ox;
 		base->pos.y = oy;
 	}
-	ren->copy_rot(this->tex, &base->pos, base->rot, base->flip);
+	if (this->tex)
+		ren->copy_rot(this->tex, &base->pos, base->rot, base->flip);
 }
 
 void gblock_on_init(GBlock* this, SceneGame* game) {
@@ -48,12 +49,31 @@ void gblock_on_init(GBlock* this, SceneGame* game) {
 	else if (base->id == 40) {
 		this->tex = fs->tex[RES_PNG("plank_01_001.png")];
 	}
+	else if (base->id == -1)
+		this->tex = NULL;
+	b2BodyDef body_def = b2DefaultBodyDef();
+	body_def.position.x = base->pos.x;
+	body_def.position.y = base->pos.y;
+	body_def.type = b2_staticBody;
+	this->body = b2CreateBody(game->world, &body_def);
+	b2ShapeDef shape_def = b2DefaultShapeDef();
+	shape_def.density = 1.0f;
+	b2Polygon box = (base->id == -1) ?
+		b2MakeBox(100000.f, 100.f) :
+		b2MakeBox(15.f, base->id == 40 ? 7.f : 15.f);
+	this->shape = b2CreatePolygonShape(this->body, &shape_def, &box);
+}
+
+void gblock_on_destroy(GBlock* this, SceneGame* game) {
+	b2DestroyShape(this->shape, false);
+	b2DestroyBody(this->body);
 }
 
 void gblock_create(GBlock* this) {
 	go_fill_base(base);
 	FCAST(base->on_init, gblock_on_init);
 	FCAST(base->on_draw, gblock_on_draw);
+	FCAST(base->on_destroy, gblock_on_destroy);
 }
 
 void gspike_on_draw(GSpike* this, SceneGame* game) {
