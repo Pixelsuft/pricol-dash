@@ -6,6 +6,8 @@ typedef struct GObject {
 	void (*on_init)(struct GObject* this);
 	void (*on_update)(struct GObject* this);
 	void (*on_draw)(struct GObject* this);
+	float rot;
+	int flip;
 	int id;
 } GObject;
 

@@ -4,7 +4,7 @@
 #define base ((GObject*)this)
 
 void gblock_on_draw(GBlock* this) {
-	ren->copy(this->tex, &base->pos);
+	ren->copy_rot(this->tex, &base->pos, base->rot, base->flip);
 }
 
 void gblock_on_init(GBlock* this) {

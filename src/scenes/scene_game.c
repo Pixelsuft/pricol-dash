@@ -91,7 +91,7 @@ void scene_game_on_init(SceneGame* this) {
 			still_should_read = *iter == ',';
 			*iter = '\0';
 			iter++;
-			if (*id_str && !id_str[1]) {
+			if (*id_str && !id_str[1] && (obj || id_str[0] == '1')) {
 				// Properties 1 - 9
 				switch (id_str[0]) {
 				case '1': {
@@ -115,18 +115,28 @@ void scene_game_on_init(SceneGame* this) {
 					break;
 				}
 				case '2': {
-					if (obj)
-						obj->pos.x = ATOF(val_str);
+					obj->pos.x = ATOF(val_str);
 					break;
 				}
 				case '3': {
-					if (obj)
-						obj->pos.y = 500.0f - ATOF(val_str);
+					obj->pos.y = 500.0f - ATOF(val_str);
+					break;
+				}
+				case '4': {
+					obj->flip |= (val_str[0] == '1') ? 1 : 0;
+					break;
+				}
+				case '5': {
+					obj->flip |= (val_str[0] == '1') ? 2 : 0;
+					break;
+				}
+				case '6': {
+					obj->rot = ATOF(val_str);
 					break;
 				}
 				}
 			}
-			else if (*id_str) {
+			else if (*id_str && obj) {
 				// Properties 10 - 99
 			}
 		}
