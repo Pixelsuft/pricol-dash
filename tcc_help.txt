@@ -1,1 +1,1 @@
-cls && d:\c++\tcc\tcc -Iinclude -Ilib\SDL2\include -Ilib\miniz -Ilib\libspng\spng -Llib\SDL2\lib\x64 -Llib\libspng\build\Release -lspng -lSDL2 src/*.c src/app/*.c src/ren/*.c src/go/*.c src/scenes/*.c && main
+cls && d:\c++\tcc\tcc -Iinclude -Ilib\SDL2\include -Ilib\miniz -Ilib\libspng\spng -Llib\SDL2\lib\x64 -Llib\libspng\build\Release -lspng -lSDL2 src/*.c src/app/*.c src/ren/*.c src/go/*.c src/scenes/*.c -o pricol-dash.exe && pricol-dash

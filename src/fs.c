@@ -134,6 +134,7 @@ void fs_load_sheet(const char* fn, int id, int png_id) {
 			res->size.h = (float)rect_buf[3] / ren->t_sc;
 		}
 	}
+	xml_document_free(document, false);
 	fs->progress++;
 }
 
