@@ -93,6 +93,9 @@
     <ClCompile Include="src\array.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\go\go_player.c">
+      <Filter>Source Files\go</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\platform.h">
@@ -145,6 +148,9 @@
     </ClInclude>
     <ClInclude Include="include\array.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\go\player.h">
+      <Filter>Header Files\go</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

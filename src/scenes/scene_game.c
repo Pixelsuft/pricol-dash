@@ -5,6 +5,7 @@
 #include <go/base.h>
 #include <go/base.h>
 #include <go/go.h>
+#include <go/player.h>
 #include <fs.h>
 #include <minstd.h>
 #define base ((Scene*)this)
@@ -171,12 +172,16 @@ void scene_game_on_init(SceneGame* this) {
 			array_push(&this->obj, sizeof(GObject*), &obj);
 		}
 	}
+	this->pl = f_alloc(sizeof(Player));
+	player_create(this->pl);
+	this->pl->on_init(this->pl, this);
 }
 
 void scene_game_on_run(SceneGame* this) {
 	app->clock_reset();
-	this->cam_pos.x = -400.f;
-	this->cam_pos.y = 200.f;
+	this->cam_pos.x = -200.f;
+	this->cam_pos.y = 150.f;
+	this->pl->on_run(this->pl, this);
 }
 
 void scene_game_on_update(SceneGame* this) {
@@ -187,6 +192,7 @@ void scene_game_on_update(SceneGame* this) {
 	for (GObject** obj = this->obj.data; obj != ARRAY_END(&this->obj); obj++) {
 		(*obj)->on_update(*obj, this);
 	}
+	this->pl->on_update(this->pl, this);
 }
 
 void scene_game_on_draw(SceneGame* this) {
@@ -199,6 +205,7 @@ void scene_game_on_draw(SceneGame* this) {
 			continue;
 		(*obj)->on_draw(*obj, this);
 	}
+	this->pl->on_draw(this->pl, this);
 }
 
 void scene_game_on_stop(SceneGame* this) {
@@ -206,6 +213,8 @@ void scene_game_on_stop(SceneGame* this) {
 }
 
 void scene_game_on_destroy(SceneGame* this) {
+	this->pl->on_destroy(this->pl, this);
+	f_free(this->pl);
 	for (GObject** obj = this->obj.data; obj != ARRAY_END(&this->obj); obj++) {
 		(*obj)->on_destroy(*obj, this);
 		f_free(*obj);

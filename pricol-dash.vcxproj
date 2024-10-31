@@ -154,6 +154,7 @@
     <ClCompile Include="src\fs.c" />
     <ClCompile Include="src\go\go_base.c" />
     <ClCompile Include="src\go\go_go.c" />
+    <ClCompile Include="src\go\go_player.c" />
     <ClCompile Include="src\main.c" />
     <ClCompile Include="src\minstd.c" />
     <ClCompile Include="src\ren\ren_base.c" />
@@ -174,6 +175,7 @@
     <ClInclude Include="include\gen\res_map.h" />
     <ClInclude Include="include\go\base.h" />
     <ClInclude Include="include\go\go.h" />
+    <ClInclude Include="include\go\player.h" />
     <ClInclude Include="include\minstd.h" />
     <ClInclude Include="include\platform.h" />
     <ClInclude Include="include\ren\base.h" />
