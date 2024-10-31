@@ -8,3 +8,10 @@ typedef struct {
 } GBlock;
 
 void gblock_create(GBlock* this);
+
+typedef struct {
+	GObject parent;
+	Tex* tex;
+} GSpike;
+
+void gspike_create(GSpike* this);

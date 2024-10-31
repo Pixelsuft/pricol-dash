@@ -105,8 +105,12 @@ void scene_game_on_init(SceneGame* this) {
 					case 6:
 					case 7: {
 						obj = f_alloc(sizeof(GBlock));
-						// TODO: create func instead of init
 						gblock_create((GBlock*)obj);
+						break;
+					}
+					case 8: {
+						obj = f_alloc(sizeof(GSpike));
+						gspike_create((GSpike*)obj);
 						break;
 					}
 					}

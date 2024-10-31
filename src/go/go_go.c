@@ -31,3 +31,17 @@ void gblock_create(GBlock* this) {
 	FCAST(base->on_init, gblock_on_init);
 	FCAST(base->on_draw, gblock_on_draw);
 }
+
+void gspike_on_draw(GSpike* this) {
+	ren->copy_rot(this->tex, &base->pos, base->rot, base->flip);
+}
+
+void gspike_on_init(GSpike* this) {
+	this->tex = fs->tex[RES_PNG("spike_01_001.png")];
+}
+
+void gspike_create(GSpike* this) {
+	go_fill_base(base);
+	FCAST(base->on_init, gspike_on_init);
+	FCAST(base->on_draw, gspike_on_draw);
+}
