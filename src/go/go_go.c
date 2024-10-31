@@ -7,9 +7,7 @@ void gblock_on_draw(GBlock* this) {
 	ren->copy(this->tex, &base->pos);
 }
 
-void gblock_init(GBlock* this) {
-	FCAST(base->on_draw, gblock_on_draw);
-	SINFO("%i", base->id);
+void gblock_on_init(GBlock* this) {
 	if (base->id == 1)
 		this->tex = fs->tex[RES_PNG("square_01_001.png")];
 	else if (base->id == 2)
@@ -26,4 +24,10 @@ void gblock_init(GBlock* this) {
 		this->tex = fs->tex[RES_PNG("square_07_001.png")];
 	else
 		this->tex = NULL;
+}
+
+void gblock_create(GBlock* this) {
+	go_fill_base(base);
+	FCAST(base->on_init, gblock_on_init);
+	FCAST(base->on_draw, gblock_on_draw);
 }

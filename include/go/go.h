@@ -7,4 +7,4 @@ typedef struct {
 	Tex* tex;
 } GBlock;
 
-void gblock_init(GBlock* this);
+void gblock_create(GBlock* this);

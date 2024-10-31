@@ -92,8 +92,10 @@ void scene_game_on_init(SceneGame* this) {
 			*iter = '\0';
 			iter++;
 			if (*id_str && !id_str[1]) {
+				// Properties 1 - 9
 				switch (id_str[0]) {
 				case '1': {
+					// Object ID
 					switch (ATOI(val_str)) {
 					case 1:
 					case 2:
@@ -104,8 +106,7 @@ void scene_game_on_init(SceneGame* this) {
 					case 7: {
 						obj = f_alloc(sizeof(GBlock));
 						// TODO: create func instead of init
-						obj->id = ATOI(val_str);
-						gblock_init((GBlock*)obj);
+						gblock_create((GBlock*)obj);
 						break;
 					}
 					}
@@ -125,9 +126,14 @@ void scene_game_on_init(SceneGame* this) {
 				}
 				}
 			}
+			else if (*id_str) {
+				// Properties 10 - 99
+			}
 		}
-		if (obj)
+		if (obj) {
+			obj->on_init(obj);
 			array_push(&this->obj, sizeof(GObject*), &obj);
+		}
 	}
 }
 
@@ -136,7 +142,9 @@ void scene_game_on_run(SceneGame* this) {
 }
 
 void scene_game_on_update(SceneGame* this) {
-	
+	for (GObject** obj = this->obj.data; obj != ARRAY_END(&this->obj); obj++) {
+		(*obj)->on_update(*obj);
+	}
 }
 
 void scene_game_on_draw(SceneGame* this) {
