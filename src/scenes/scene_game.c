@@ -103,7 +103,8 @@ void scene_game_on_init(SceneGame* this) {
 					case 4:
 					case 5:
 					case 6:
-					case 7: {
+					case 7:
+					case 40: {
 						obj = f_alloc(sizeof(GBlock));
 						gblock_create((GBlock*)obj);
 						break;
