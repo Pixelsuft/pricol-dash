@@ -1,13 +1,15 @@
 #pragma once
 #include <scenes/base.h>
 #include <array.h>
+#include <box2d/box2d.h>
 
 typedef struct GObject GObject;
 
 typedef struct {
 	Scene parent;
-	Point cam_pos;
+	Array(GObject*) obj;
 	Color def_bg_col;
 	Color def_gr_col;
-	Array(GObject*) obj;
+	Point cam_pos;
+	b2WorldId world;
 } SceneGame;

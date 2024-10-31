@@ -15,6 +15,10 @@ void scene_game_on_init(SceneGame* this) {
 	this->def_bg_col.a = this->def_gr_col.a = 255.0f;
 	array_init(&this->obj, 0, sizeof(GObject*), sizeof(GObject*) * 128);
 	char* lv_str = fs->lv_data[0];
+	b2WorldDef world_def = b2DefaultWorldDef();
+	world_def.gravity.y = 9.81f * 30.f;
+	this->world = b2CreateWorld(&world_def);
+	// Parsing begins
 	char* iter = (char*)lv_str;
 	char* prev_ch;
 	char* prev_ch2;
@@ -171,12 +175,15 @@ void scene_game_on_init(SceneGame* this) {
 
 void scene_game_on_run(SceneGame* this) {
 	app->clock_reset();
-	this->cam_pos.x = this->cam_pos.y = 0.f;
+	this->cam_pos.x = -400.f;
+	this->cam_pos.y = 200.f;
 }
 
 void scene_game_on_update(SceneGame* this) {
-	this->cam_pos.x = -ren->offset.x;
-	this->cam_pos.y = -ren->offset.y;
+	this->cam_pos.x += 10.4f * 30.f * dt;
+	ren->offset.x = -this->cam_pos.x;
+	ren->offset.y = -this->cam_pos.y;
+	b2World_Step(this->world, dt, 4);
 	for (GObject** obj = this->obj.data; obj != ARRAY_END(&this->obj); obj++) {
 		(*obj)->on_update(*obj, this);
 	}
@@ -185,8 +192,6 @@ void scene_game_on_update(SceneGame* this) {
 void scene_game_on_draw(SceneGame* this) {
 	ren->clear(&this->def_bg_col);
 	ren->fill_rect_s(&RECT(0, 500, 100000, 5), &this->def_gr_col);
-	ren->fill_rect_s(&RECT(100, 100, 30, 30), &this->def_bg_col);
-	ren->fill_rect_s(&RECT(100, 200, 30, 30), &this->def_gr_col);
 	for (GObject** obj = this->obj.data; obj != ARRAY_END(&this->obj); obj++) {
 		if ((*obj)->pos.x + 50.f < this->cam_pos.x)
 			continue;
@@ -202,9 +207,11 @@ void scene_game_on_stop(SceneGame* this) {
 
 void scene_game_on_destroy(SceneGame* this) {
 	for (GObject** obj = this->obj.data; obj != ARRAY_END(&this->obj); obj++) {
+		(*obj)->on_destroy(*obj, this);
 		f_free(*obj);
 	}
 	array_destroy(&this->obj);
+	b2DestroyWorld(this->world);
 }
 
 Scene* scene_game_create(void) {

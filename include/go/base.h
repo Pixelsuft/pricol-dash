@@ -7,6 +7,7 @@ typedef struct GObject {
 	void (*on_init)(struct GObject* this, SceneGame* game);
 	void (*on_update)(struct GObject* this, SceneGame* game);
 	void (*on_draw)(struct GObject* this, SceneGame* game);
+	void (*on_destroy)(struct GObject* this, SceneGame* game);
 	float rot;
 	int flip;
 	int id;

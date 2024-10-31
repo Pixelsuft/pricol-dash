@@ -9,6 +9,7 @@
 #include <spng.h>
 #include <minstd.h>
 #include <fs.h>
+#include <scenes/base.h>
 #include <ren/base.h>
 #define LOG_ALLOC DEBUG
 
@@ -228,6 +229,15 @@ void app_sdl2_poll_events(void) {
 				ren->offset.y += app_sdl2->ev.motion.yrel / ren->scale;
 				break;
 			}
+		}
+		case SDL_KEYDOWN: {
+			if (app_sdl2->ev.key.keysym.scancode == SDL_SCANCODE_D) {
+				app->sc->on_stop(app->sc);
+				app->sc->on_destroy(app->sc);
+				app->sc->on_init(app->sc);
+				app->sc->on_run(app->sc);
+			}
+			break;
 		}
 		}
 	}
