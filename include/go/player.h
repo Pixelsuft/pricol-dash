@@ -12,6 +12,8 @@ typedef struct Player {
 	void (*on_destroy)(struct Player* this, SceneGame* game);
 	Tex* tex1;
 	Tex* tex2;
+	b2BodyId body;
+	b2ShapeId shape;
 } Player;
 
 void player_create(Player* this);
