@@ -13,7 +13,7 @@
 void scene_game_on_init(SceneGame* this) {
 	this->def_bg_col.a = this->def_gr_col.a = 255.0f;
 	array_init(&this->obj, 0, sizeof(GObject*), sizeof(GObject*) * 128);
-	char* lv_str = fs->lv_data[0]; // TODO: dup str
+	char* lv_str = fs->lv_data[7]; // TODO: dup str
 	char* iter = (char*)lv_str;
 	bool still_should_read = true;
 	int audio_id = 0;

@@ -3,7 +3,7 @@
 #include <gen/res_map.h>
 #include <ren/base.h>
 #include <bmfont.h>
-#define MAX_LEVELS 7
+#define MAX_LEVELS 8
 
 typedef struct {
 	BMFont fnt[MAX_RES_FNT];

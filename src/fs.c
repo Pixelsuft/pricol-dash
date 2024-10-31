@@ -155,7 +155,7 @@ void fs_load_levels(const char* fn) {
 	if (buf == NULL)
 		return;
 	char* iter = buf;
-	for (size_t i = 0; i < 7; i++) {
+	for (size_t i = 0; i < MAX_LEVELS; i++) {
 		fs->lv_data[i] = iter;
 		while (*iter != '\n')
 			iter++;
