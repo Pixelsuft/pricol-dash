@@ -21,6 +21,8 @@ typedef struct {
 typedef void ArrayBase;
 #endif
 
+#define ARRAY_END(this) (&((this)->data[(this)->len]))
+
 bool array_init(ArrayBase* this, size_t initial_len, size_t elem_size, int chunk_size);
 bool array_set_len(ArrayBase* this, size_t need_len, size_t elem_size, bool trim);
 bool array_push(ArrayBase* this, size_t elem_size, const void* need_elem);
