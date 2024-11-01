@@ -184,16 +184,18 @@ void scene_game_on_init(SceneGame* this) {
 		ground->parent.on_init(&ground->parent, this);
 		array_push(&this->obj, sizeof(GObject*), &ground);
 	}
-
 	this->pl = f_alloc(sizeof(Player));
 	player_create(this->pl);
 	this->pl->on_init(this->pl, this);
+	this->floor = fs->tex[RES_PNG("floor.png")];
+	this->ground = fs->tex[RES_PNG("groundSquare_001.png")];
 }
 
 void scene_game_on_run(SceneGame* this) {
 	app->clock_reset();
 	this->cam_pos.x = -200.f;
 	this->cam_pos.y = 150.f;
+	this->ground_pos = 64.f;
 	this->pl->on_run(this->pl, this);
 }
 
@@ -216,11 +218,14 @@ void scene_game_on_update(SceneGame* this) {
 		has_key = false;
 	this->pl->on_update(this->pl, this);
 	this->pl->holding_jump_key = false;
+	this->ground_pos -= 10.4f * 30.f * dt;
+	if (this->ground_pos <= -64.f)
+		this->ground_pos += 128.f;
 }
 
 void scene_game_on_draw(SceneGame* this) {
 	ren->clear(&this->def_bg_col);
-	ren->fill_rect_s(&RECT(0, 500, 100000, 5), &this->def_gr_col);
+	// ren->fill_rect_s(&RECT(0, 400, 100000, 5), &this->def_gr_col);
 	for (GObject** obj = this->obj.data; obj != ARRAY_END(&this->obj); obj++) {
 		if ((*obj)->pos.x + 50.f < this->cam_pos.x)
 			continue;
@@ -228,6 +233,15 @@ void scene_game_on_draw(SceneGame* this) {
 			continue;
 		(*obj)->on_draw(*obj, this);
 	}
+	// Ground
+	ren->offset.x = 0.f;
+	ren->tex_col(this->ground, &this->def_gr_col);
+	for (float x = this->ground_pos; x < this->ground_pos + 128.f * 8.f; x += 128.f) {
+		Point dst = { x, 500.f + 64.f };
+		ren->copy(this->ground, &dst);
+	}
+	ren->copy(this->floor, &POINT(ren->vs.w / 2.0f, 500.f));
+	ren->offset.x = -this->cam_pos.x;
 	this->pl->on_draw(this->pl, this);
 }
 
