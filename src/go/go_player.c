@@ -13,7 +13,8 @@ void go_player_init(Player* this, SceneGame* game) {
 	body_def.fixedRotation = true;
 	this->body = b2CreateBody(game->world, &body_def);
 	b2ShapeDef shape_def = b2DefaultShapeDef();
-	shape_def.density = 1.0f;
+	float mass = 0.1f;
+	shape_def.density = mass / 30.f / 30.f;
 	shape_def.friction = 0.f;
 	b2Polygon box = b2MakeBox(15.f, 15.f);
 	this->shape = b2CreatePolygonShape(this->body, &shape_def, &box);
@@ -24,22 +25,29 @@ void go_player_run(Player* this, SceneGame* game) {
 	this->pos.y = 400.f;
 	b2Vec2 vel = b2Body_GetLinearVelocity(this->body);
 	vel.x = 10.4f * 30.f;
-	vel.y = 0.f;
+	vel.y = 10.f;
+	this->jump_time = 0.f;
 	b2Body_SetLinearVelocity(this->body, vel);
 	b2Body_SetTransform(this->body, (b2Vec2) { .x = this->pos.x, .y = this->pos.y }, b2Body_GetRotation(this->body));
 }
 
 void go_player_update(Player* this, SceneGame* game) {
-	if (this->holding_jump_key) {
-		b2Body_ApplyForceToCenter(this->body, (b2Vec2) { .x = 0.f, .y = b2Body_GetMass(this->body) * -40000.f}, false);
-	}
-	b2Vec2 vel = b2Body_GetLinearVelocity(this->body);
-	vel.x = 10.4f * 30.f;
-	b2Body_SetLinearVelocity(this->body, vel);
 	b2Vec2 cur_pos = b2Body_GetPosition(this->body);
 	this->pos.x += 10.4f * 30.f * dt;
 	this->pos.y = cur_pos.y;
 	b2Body_SetTransform(this->body, *(b2Vec2*)&this->pos, b2Body_GetRotation(this->body));
+	b2Vec2 vel = b2Body_GetLinearVelocity(this->body);
+	vel.x = 10.4f * 30.f;
+	vel.y += dt * 3000.f;
+	b2Body_SetLinearVelocity(this->body, vel);
+	if (this->holding_jump_key) {
+		this->jump_time = 0.12f;
+		b2Body_ApplyLinearImpulseToCenter(this->body, (b2Vec2) { .x = 0.f, .y = b2Body_GetMass(this->body) * -40000.f }, true);
+	}
+	if (this->jump_time > 0.f) {
+		this->jump_time -= dt;
+		b2Body_ApplyForceToCenter(this->body, (b2Vec2) { .x = 0.f, .y = b2Body_GetMass(this->body) * -40000.f }, true);
+	}
 }
 
 void go_player_draw(Player* this, SceneGame* game) {
